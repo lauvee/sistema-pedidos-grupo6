@@ -20,9 +20,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+@Data
 @Entity
-@Table(name = "Usuario",  schema = "public")
-
+@Table(name = "USUARIO",  schema = "public")
 public class Usuario {
     
     @Id
