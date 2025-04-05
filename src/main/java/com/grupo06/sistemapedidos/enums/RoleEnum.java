@@ -1,5 +1,6 @@
 package com.grupo06.sistemapedidos.enums;
 
+
 /**
  * Enum que representa los roles de los usuarios en el sistema.
  * ADMIN: Rol de administrador con todos los permisos.
