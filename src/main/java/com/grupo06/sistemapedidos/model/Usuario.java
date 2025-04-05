@@ -18,10 +18,26 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+/**
+ * Clase que representa la entidad Usuario en la base de datos.
+ * Contiene información sobre el usuario, incluyendo su nombre, 
+ * correo electrónico, contraseña, fecha de registro,
+ * total gastado y su rol.
+ * 
+ * @Schema Permite configurar la documentación de Swagger para esta entidad
+ * @Getter, @Setter y @NoArgsConstructor son anotaciones de Lombok para generar automáticamente 
+ * los getters, setters y constructores sin argumentos
+ */
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 @Table(name = "USUARIO",  schema = "public")
 public class Usuario {
     
@@ -62,5 +78,6 @@ public class Usuario {
     private Roles role;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Pedido> pedidos = new ArrayList<>(); // Inicialización de la lista
+    private List<Pedido> pedidos = new ArrayList<>();
+
 }
