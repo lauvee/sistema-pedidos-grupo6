@@ -16,15 +16,11 @@ import java.security.KeyFactory;
 import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
-import java.util.logging.Logger;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private static final Logger logger = Logger.getLogger(JwtAuthenticationFilter.class.getName());
-
     @Value("${jwt.public.key}")
     private String publicKey;
-
     private PublicKey key;
 
     @Override
@@ -45,7 +41,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String header = request.getHeader("Authorization");
         if (header != null && header.startsWith("Bearer ")) {
             String token = header.substring(7);
-
             try {
                 Claims claims = Jwts.parser()
                         .setSigningKey(key)
@@ -56,13 +51,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 Authentication authentication = new JwtAuthentication(claims);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (Exception e) {
-                logger.severe("Invalid Token: " + e.getMessage());
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.getWriter().write("Invalid Token");
                 return;
             }
         }
-
         filterChain.doFilter(request, response);
     }
 }

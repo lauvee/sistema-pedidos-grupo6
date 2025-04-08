@@ -1,10 +1,10 @@
 package com.grupo06.sistemapedidos.config;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springdoc.core.models.GroupedOpenApi;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
+import org.springdoc.core.models.GroupedOpenApi;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * Clase de configuración para Swagger/OpenAPI en la aplicación.
@@ -24,21 +24,19 @@ public class SwaggerConfig {
                 .info(new Info()
                         .title("API Sistema de Pedidos")
                         .version("1.0")
-                        .description("Documentacion de API para sistema de pedidos "));
+                        .description("Documentación de la API para el sistema de pedidos. Proporciona endpoints para gestionar usuarios, autenticación y más."));
     }
 
     /**
-     * Configura un grupo de API para los endpoints relacionados con los pedidos.
+     * Configura un grupo de API para los endpoints relacionados con usuarios.
      *
-     * @return una instancia de {@link GroupedOpenApi} con la configuración del grupo "task".
+     * @return una instancia de {@link GroupedOpenApi} con la configuración del grupo "usuarios".
      */
-   /* @Bean
-    public GroupedOpenApi taskApi() {
+    @Bean
+    public GroupedOpenApi userApi() {
         return GroupedOpenApi.builder()
-                .group("task")
-                .pathsToMatch("/api/tasks/**")
+                .group("usuarios")
+                .pathsToMatch("/api/users/**") // Especifica los endpoints relacionados con usuarios
                 .build();
     }
-
-    */
 }
