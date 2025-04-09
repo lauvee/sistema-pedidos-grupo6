@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 
 
-// TODO: Crear un global handler para manerjar errore, algunso de los metodos devuelben UserError
+// TODO: Crear un global handler para manerjar errore, algunso de los metodos devuelven UserError
 @Controller
 public class UserController {
     private final UserService userService;
