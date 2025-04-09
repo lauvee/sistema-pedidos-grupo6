@@ -3,13 +3,16 @@ package com.grupo06.sistemapedidos.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "PEDIDO", schema = "public")
-@Data
+@AllArgsConstructor
+@Getter
+@Setter
 public class Pedido {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idPedido", nullable = false, unique = true)

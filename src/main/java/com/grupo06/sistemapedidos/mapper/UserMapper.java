@@ -1,7 +1,10 @@
 package com.grupo06.sistemapedidos.mapper;
 
+import java.util.ArrayList;
 import org.springframework.stereotype.Component;
 import com.grupo06.sistemapedidos.dto.UsuarioDTO;
+import com.grupo06.sistemapedidos.model.Pedido;
+import com.grupo06.sistemapedidos.model.Roles;
 import com.grupo06.sistemapedidos.model.Usuario;
 
 /**
@@ -11,7 +14,6 @@ import com.grupo06.sistemapedidos.model.Usuario;
  */
 @Component
 public class UserMapper {
-
     /**
      * Convierte un objeto Usuario a un objeto UsuarioDTO.
      * 
@@ -19,7 +21,12 @@ public class UserMapper {
      * @return el objeto UsuarioDTO convertido
      */
     public UsuarioDTO toDTO(Usuario usuario){
-        return new UsuarioDTO();
+        return new UsuarioDTO(
+            usuario.getName(), 
+            usuario.getEmail(),
+            usuario.getSignUpDate(),
+            usuario.getTotalSpent(),
+            usuario.getRole().getName());
     }
 
     /**
@@ -29,6 +36,19 @@ public class UserMapper {
      * @return el objeto Usuario convertido
      */
     public Usuario toEntity(UsuarioDTO usuarioDTO){
-        return new Usuario();
+
+        // TODO cargar todos los productos asociados
+        ArrayList<Pedido> pedidos = new ArrayList<>();
+
+        return new Usuario(
+            null,
+            usuarioDTO.getName(),
+            usuarioDTO.getEmail(), 
+            "", // TODO: Contraseña del usuario 
+            usuarioDTO.getSignUpDate(), 
+            usuarioDTO.getTotalSplent(),
+            new Roles(),
+            pedidos
+        );
     }
 }
