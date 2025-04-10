@@ -1,8 +1,10 @@
 package com.grupo06.sistemapedidos.mapper;
 
+import org.springframework.stereotype.Component;
 import com.grupo06.sistemapedidos.dto.PedidoDTO;
 import com.grupo06.sistemapedidos.model.Pedido;
 
+@Component
 public class PedidoMapper {
     public PedidoDTO toDTO(Pedido usuario){
         return new PedidoDTO(
