@@ -3,6 +3,9 @@ package com.grupo06.sistemapedidos.service;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
+
+import com.grupo06.sistemapedidos.dto.ProductDTO;
+import com.grupo06.sistemapedidos.mapper.ProductMapper;
 import com.grupo06.sistemapedidos.model.Producto;
 import com.grupo06.sistemapedidos.repository.ProductRepository;
 
@@ -10,13 +13,16 @@ import com.grupo06.sistemapedidos.repository.ProductRepository;
 public class ProductService {
   
     private ProductRepository productRepository;
+    private ProductMapper productMapper;
 
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
-    public List<Producto> findAll(){
-        return productRepository.findAll();
+    public List<ProductDTO> findAll() throws Exception  {
+        List<Producto> listProductos = productRepository.findAll();
+        return listProductos.stream()
+                .map(productMapper::toDTO).toList();
     }
 
     /**
@@ -25,8 +31,12 @@ public class ProductService {
      * @param id ID del producto a obtener
      * @return Optional<Producto> Producto encontrado
      */
-    public Optional<Producto> findById(Integer id) {
-        return productRepository.findById(id);
+    public ProductDTO findById(Integer id) throws Error {
+        Optional<Producto> newProducto = productRepository.findById(id);
+        if(!newProducto.isPresent()){
+            throw new Error();
+        }
+        return productMapper.toDTO(newProducto.get());
     }
 
     /**
@@ -35,8 +45,10 @@ public class ProductService {
      * @param producto
      * @return Producto guardado o actualizado
      */
-    public Producto save(Producto producto) {
-        return productRepository.save(producto);
+    public ProductDTO postProducto(ProductDTO producto) throws Exception {
+        Producto newProducto = productMapper.toEntity(producto);
+        Producto savedProduct =  productRepository.save(newProducto);
+        return productMapper.toDTO(savedProduct);
     }
 
     /**
@@ -44,7 +56,7 @@ public class ProductService {
      * 
      * @param id ID del producto a eliminar
      */
-    public void deleteById(Integer id) {
+    public void deleteById(Integer id) throws Exception {
         productRepository.deleteById(id);
     }
 }

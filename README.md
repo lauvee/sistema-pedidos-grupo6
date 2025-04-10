@@ -56,33 +56,33 @@ Para mas documentacion visitar la cocumentacion de Swagger en el siguiente enlac
 
 ### Usuarios
 
-| Método | Endpoint                   | Descripción                | Código HTTP      |
-| ------ | -------------------------- | -------------------------- | ---------------- |
-| POST   | `/api/users/auth/register` | Registro de usuario        | `201 Created`    |
-| POST   | `/api/users/auth/login`    | Inicio de sesión           | `200 OK`         |
-| GET    | `/api/users/users`         | Obtener todos los usuarios | `200 OK`         |
-| GET    | `/api/users/users/{id}`    | Obtener usuario por ID     | `200 OK`         |
-| DELETE | `/api/users/{id}`          | Eliminar usuario por ID    | `204 No Content` |
+| Método | Endpoint                  | Descripción                | Código HTTP      |
+| ------ | ------------------------- | -------------------------- | ---------------- |
+| POST   | `/api/user/auth/register` | Registro de usuario        | `201 Created`    |
+| POST   | `/api/user/auth/login`    | Inicio de sesión           | `200 OK`         |
+| GET    | `/api/user/all`           | Obtener todos los usuarios | `200 OK`         |
+| GET    | `/api/user/{email}`       | Obtener usuario por email  | `200 OK`         |
+| DELETE | `/api/user/{id}`          | Eliminar usuario por ID    | `204 No Content` |
 
 ### Productos
 
-| Método | Endpoint          | Descripción                 | Código HTTP      |
-| ------ | ----------------- | --------------------------- | ---------------- |
-| GET    | `/productos`      | Obtener todos los productos | `200 OK`         |
-| GET    | `/productos/{id}` | Obtener producto por ID     | `200 OK`         |
-| POST   | `/productos`      | Crear nuevo producto        | `201 Created`    |
-| PUT    | `/productos/{id}` | Actualizar producto por ID  | `200 OK`         |
-| DELETE | `/productos/{id}` | Eliminar producto por ID    | `204 No Content` |
+| Método | Endpoint                 | Descripción                 | Código HTTP      |
+| ------ | ------------------------ | --------------------------- | ---------------- |
+| GET    | `/api/producto/{id}`     | Obtener producto por ID     | `200 OK`         |
+| GET    | `/api/producto/all`      | Obtener todos los productos | `200 OK`         |
+| POST   | `/api/producto`          | Crear nuevo producto        | `201 Created`    |
+| PUT    | `/api/producto`          | Actualizar producto         | `200 OK`         |
+| DELETE | `/api/producto/del/{id}` | Eliminar producto por ID    | `204 No Content` |
 
 ### Pedidos
 
-| Método | Endpoint           | Descripción               | Código HTTP      |
-| ------ | ------------------ | ------------------------- | ---------------- |
-| GET    | `/all/pedidos`     | Obtener todos los pedidos | `200 OK`         |
-| GET    | `/pedido/{id}`     | Obtener pedido por ID     | `200 OK`         |
-| POST   | `/pedido`          | Crear nuevo pedido        | `201 Created`    |
-| PUT    | `/pedido/{id}`     | Actualizar pedido por ID  | `200 OK`         |
-| DELETE | `/del/pedido/{id}` | Eliminar pedido por ID    | `204 No Content` |
+| Método | Endpoint               | Descripción               | Código HTTP      |
+| ------ | ---------------------- | ------------------------- | ---------------- |
+| GET    | `/api/pedido/{id}`     | Obtener pedido por ID     | `200 OK`         |
+| GET    | `/api/pedido/all`      | Obtener todos los pedidos | `200 OK`         |
+| POST   | `/api/pedido`          | Crear nuevo pedido        | `201 Created`    |
+| PUT    | `/api/pedido`          | Actualizar pedido por ID  | `200 OK`         |
+| DELETE | `/api/del/pedido/{id}` | Eliminar pedido por ID    | `204 No Content` |
 
 ## Mensajes de Respuesta y Códigos de Estado HTTP implementados 🎯
 

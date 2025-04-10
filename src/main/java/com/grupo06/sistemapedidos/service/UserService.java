@@ -67,15 +67,34 @@ public class UserService {
 
 
     /**
-     * Devuelbe el usuairo pasandole por parametro la id de este
+     * Devuelbe el usuairo pasandole por parametro el email de este
      * 
-     * @param UsuarioDTO DTO para la trasnfarencias de usuarios
+     * @param email email del usuario a buscar
      * @return UsuarioDTO DTO para la trasnfarencias de usuarios
      * @throws UserError Error personalziado de usuario
      */
-    public UsuarioDTO getUser(UsuarioDTO userDTO) throws UserError {
+    public UsuarioDTO getUserByEmail(String email) throws UserError {
         try {
-            Optional<Usuario> newUser = userRepository.findByEmail(userDTO.getEmail());
+            Optional<Usuario> newUser = userRepository.findByEmail(email);
+            if(newUser.isPresent()){
+                return userMapper.toDTO(newUser.get());
+            }
+            return null;
+        } catch (Exception ex) {
+            throw new UserError("Error al registrar el usuario: " + ex.getMessage());
+        }
+    }
+
+    /**
+     * Obtiene el usuario pasandole por parametro la id de este
+     * 
+     * @param 
+     * @return UsuarioDTO DTO para la trasnfarencias de usuarios
+     * @throws UserError Error personalziado de usuario
+     */
+    public UsuarioDTO getUserById(Integer id) throws UserError {
+        try {
+            Optional<Usuario> newUser = userRepository.findById(id);
             if(newUser.isPresent()){
                 return userMapper.toDTO(newUser.get());
             }

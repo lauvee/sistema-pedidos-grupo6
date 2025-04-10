@@ -14,7 +14,7 @@ public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
     List<Pedido> findAll();
     List<Pedido> findByUsuario(Usuario usuario);
     List<Pedido> findByUsuarioId(Integer usuarioId);
-    List<Pedido> findByProducto(Producto producto);
-    List<Pedido> findByProductoId(Integer productoId);
-    List<Pedido> findByUsuarioAndProducto(Usuario usuario, Producto producto);
+    List<Pedido> findByProductos(Producto producto);
+    List<Pedido> findByProductos_Id(Integer productoId);
+    List<Pedido> findByUsuarioAndProductos(Usuario usuario, Producto producto);
 }
