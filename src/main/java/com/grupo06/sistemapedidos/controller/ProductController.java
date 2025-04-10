@@ -2,10 +2,8 @@ package com.grupo06.sistemapedidos.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import com.grupo06.sistemapedidos.model.Producto;
 import com.grupo06.sistemapedidos.service.ProductService;
 
@@ -13,8 +11,11 @@ import com.grupo06.sistemapedidos.service.ProductService;
 @RequestMapping("/api/productos") // Define la ruta base para todos los endpoints de este controlador
 public class ProductController {
 
-    @Autowired // Inyección de dependencias para el servicio de productos
     private ProductService productoService;
+
+    public ProductController(ProductService productoService) {
+        this.productoService = productoService;
+    }
 
     // Obtiene un producto por ID
     @GetMapping("/{id}") // Define un endpoint GET con un parámetro en la URL
