@@ -1,15 +1,20 @@
 package com.grupo06.sistemapedidos.model;
 
 
+import java.util.List;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "PEDIDO", schema = "public")
-@Data
+@AllArgsConstructor
+@Getter
+@Setter
 public class Pedido {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idPedido", nullable = false, unique = true)
@@ -21,7 +26,11 @@ public class Pedido {
     private Usuario usuario;
     
     @NotNull(message = "El producto no puede ser nulo")
-    @ManyToOne
-    @JoinColumn(name = "pedidoFK", referencedColumnName = "idProducto", nullable = false)
-    private Producto producto;
+    @ManyToMany
+    @JoinTable(
+        name = "pedido_producto",
+        joinColumns = @JoinColumn(name = "pedido_id"),
+        inverseJoinColumns = @JoinColumn(name = "producto_id")
+    )
+    private List<Producto> productos;
 }

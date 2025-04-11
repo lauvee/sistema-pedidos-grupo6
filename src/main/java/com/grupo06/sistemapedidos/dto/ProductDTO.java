@@ -1,43 +1,33 @@
-package com.grupo06.sistemapedidos.model;
+package com.grupo06.sistemapedidos.dto;
 
-
-import java.util.List;
-
-import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-@Entity
-@Table(name = "PRODUCTO", schema = "public")
 @Data
-public class Producto {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idProducto", nullable = false, unique = true)
+public class ProductDTO {
+
+     // Identificador único del producto
     private Integer id;
 
+    // Nombre del producto, no puede ser nulo ni estar vacío
     @NotNull(message = "El nombre del producto no puede ser nulo")
     @NotEmpty(message = "El nombre del producto no puede estar vacío")
-    @Column(name = "name", nullable = false)
     private String name;
 
+    // Stock del producto, no puede ser nulo y debe ser mayor o igual a 0
     @NotNull(message = "El stock no puede ser nulo")
     @Min(value = 0, message = "El stock no puede ser negativo")
-    @Column(name = "stock", nullable = false)
     private Integer stock;
-    
+
+    // Precio del producto, no puede ser nulo y debe ser mayor o igual a 0
     @NotNull(message = "El precio no puede ser nulo")
     @Min(value = 0, message = "El precio no puede ser negativo")
-    @Column(name = "price", nullable = false)
     private Integer price;
 
+    // Descripción del producto, no puede ser nula ni estar vacía
     @NotNull(message = "La descripción no puede ser nula")
     @NotEmpty(message = "La descripción no puede estar vacía")
-    @Column(name = "description", nullable = false)
     private String description;
-
-    @ManyToMany(mappedBy = "productos")
-    private List<Pedido> pedidos;
 }
