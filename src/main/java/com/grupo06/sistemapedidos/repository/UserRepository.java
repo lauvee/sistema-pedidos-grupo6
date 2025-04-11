@@ -17,14 +17,6 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<Usuario, Integer> {
 
     /**
-     * Busca un usuario por su ID.
-     *
-     * @param id el ID del usuario a buscar
-     * @return un Optional que contiene el usuario si se encuentra, o vacío si no
-     */
-    Optional<Usuario> findById(int id);
-
-    /**
      * Busca un usuario por su correo electrónico.
      *
      * @param email el correo electrónico del usuario a buscar
@@ -32,22 +24,6 @@ public interface UserRepository extends JpaRepository<Usuario, Integer> {
      */
     Optional<Usuario> findByEmail(String email);
 
-    /**
-     * Busca un usuario por su nombre de usuario.
-     *
-     * @param username el nombre de usuario a buscar
-     * @return un Optional que contiene el usuario si se encuentra, o vacío si no
-     */
-    Optional<Usuario> findByName(String username);
-
-    /**
-     * Busca un usuario por su nombre de usuario o correo electrónico.
-     *
-     * @param username el nombre de usuario a buscar
-     * @param email    el correo electrónico del usuario a buscar
-     * @return un Optional que contiene el usuario si se encuentra, o vacío si no
-     */
-    Optional<Usuario> findByNameOrEmail(String username, String email);
 
     /**
      * Busca todos los usuarios pasandole una lista con sus id

@@ -2,48 +2,46 @@ package com.grupo06.sistemapedidos.service;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.security.KeyFactory;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.util.Base64;
+import javax.crypto.SecretKey;
 import java.util.Date;
 
+/**
+ * Servicio para generar y gestionar tokens JWT.
+ *
+ * Este servicio se encarga de la creación de tokens JWT firmados utilizando una clave secreta y con una fecha de expiración configurada.
+ * El token también contiene el correo electrónico del usuario y su rol.
+ */
 @Service
 public class JwtTokenService {
 
-    @Value("${jwt.private.key}")
-    private String privateKey;
-
+    @Value("${jwt.secret.key}")
+    private String jwtSecret;
     @Value("${jwt.expiration.time}")
     private long expirationTime;
 
     /**
-     * Genera un token JWT para el usuario.
+     * Método para generar un token JWT firmado con el correo electrónico y rol del usuario.
      *
-     * @param username El nombre de usuario.
+     * Este token tiene una fecha de emisión y una fecha de expiración configurada en la aplicación.
+     *
+     * @param email Correo electrónico del usuario, que será utilizado como el "subject" del token.
+     * @param role El rol del usuario, que será guardado como un claim adicional en el token.
      * @return El token JWT generado.
-     * @throws Exception Excepción en caso de error.
      */
-    public String generateToken(String username) throws Exception {
-        // Formatea la clave privada eliminando saltos de línea y espacios en blanco
-        String formattedKey = privateKey.replaceAll("[\\n\\r\\s]", "");
+    public String generateTokenWithRole(String email, String role) {
+        SecretKey secretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes());
 
-        // Decodifica la clave privada desde Base64
-        byte[] decoded = Base64.getMimeDecoder().decode(formattedKey);
-
-        // Crea una instancia de KeyFactory para generar la clave RSA
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-        RSAPrivateKey key = (RSAPrivateKey) keyFactory.generatePrivate(new PKCS8EncodedKeySpec(decoded));
-
-        // Crea el JWT utilizando la clave privada y la información del usuario
+        // Construir el token JWT con los parámetros correspondientes:
         return Jwts.builder()
-                .setSubject(username) // Asigna el nombre de usuario como el sujeto del token
-                .setIssuedAt(new Date()) // Fecha de emisión del token
-                .setExpiration(new Date(System.currentTimeMillis() + expirationTime)) // Fecha de expiración
-                .signWith(key, SignatureAlgorithm.RS256) // Firma con la clave RSA y el algoritmo RS256
-                .compact(); // Devuelve el token compactado
+                .setSubject(email)
+                .claim("role", role)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
+                .signWith(secretKey, SignatureAlgorithm.HS512)
+                .compact();
     }
 }
