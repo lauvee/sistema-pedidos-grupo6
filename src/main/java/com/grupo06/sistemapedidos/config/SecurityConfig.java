@@ -1,87 +1,55 @@
 package com.grupo06.sistemapedidos.config;
 
+import com.grupo06.sistemapedidos.security.JwtAuthenticationFilter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
-// import com.grupo06.sistemapedidos.filter.JwtRequestFilter; TODO:
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
- * Configuración de seguridad para la aplicación.
- * Esta clase define las políticas de seguridad, incluyendo las reglas de autorización,
- * configuración de filtros y encriptación de contraseñas.
- * 
- * La anotación @Configuration indica que esta clase es una fuente de definiciones de beans.
- * La anotación @EnableWebSecurity habilita la seguridad web de Spring Security.
+ * Clase de configuración de seguridad que configura los filtros de autenticación
+ * y autorización para las rutas de la aplicación.
+ * Configura la autenticación basada en JWT y define los endpoints permitidos y protegidos.
  */
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity // Habilita la configuración de seguridad web en Spring Security
 public class SecurityConfig {
 
+    @Value("${jwt.secret.key}")
+    private String jwtSecret;
+
     /**
-     * Configura la cadena de filtros de seguridad para la aplicación.
-     * Define las reglas de acceso a distintos endpoints:
-     * - Rutas públicas: login, registro, documentación Swagger
-     * - Rutas para administradores: gestión de usuarios y operaciones de eliminación
-     * - Resto de rutas: requieren autenticación
-     * 
-     * También se configura la desactivación de CSRF y la adición del filtro JWT.
+     * Configura la seguridad de las solicitudes HTTP.
+     * Se establece un filtro personalizado para la autenticación JWT y se configuran
+     * las rutas que deben estar protegidas o abiertas.
      *
-     * @param http Objeto HttpSecurity para configurar la seguridad HTTP
-     * @param jwtRequestFilter Filtro personalizado para procesar tokens JWT
-     * @return La cadena de filtros de seguridad configurada
-     * @throws Exception Si ocurre algún error durante la configuración
+     * @param http El objeto HttpSecurity que se configura para la seguridad web.
+     * @return El filtro de seguridad configurado.
+     * @throws Exception Si ocurre un error durante la configuración de seguridad.
      */
     @Bean
-    // TODO: Pasar por parametor JwtRequestFilter jwtRequestFilter
-    public SecurityFilterChain securityFilterChain(
-            HttpSecurity http
-            ) throws Exception {
-            http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(AbstractHttpConfigurer::disable) // Deshabilita la protección CSRF (no necesario para API REST)
+                .authorizeHttpRequests(authorize -> authorize
+                        // Rutas que no requieren autenticación
                         .requestMatchers(
-                            "/users/login",
-                                "/users/register",
-                                "/swagger-ui/**",
+                                "/auth/token",
                                 "/v3/api-docs/**",
+                                "/swagger-ui/**",
                                 "/swagger-ui.html",
                                 "/swagger-resources/**",
-                                "/webjars/**", "/js/**", "/static/**").permitAll()
-                        .requestMatchers("/users/list", "/users/admin/register", "/users/resources/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/**").hasRole("ADMIN")
-                        .anyRequest().authenticated());
-                // TODO .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+                                "/webjars/**",
+                                "/auth/register"
+                        ).permitAll()  // Permite acceso sin autenticación a las rutas anteriores
+                        .anyRequest().authenticated() // Requiere autenticación para cualquier otra solicitud
+                )
+                .addFilterBefore(new JwtAuthenticationFilter(jwtSecret), UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
-
-    /**
-     * Provee un codificador de contraseñas para la aplicación.
-     * Se utiliza BCrypt, un algoritmo de hashing seguro para almacenar contraseñas.
-     * 
-     * @return Un objeto PasswordEncoder que utiliza el algoritmo BCrypt
-     */
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    /**
-     * Crea y configura el filtro de peticiones JWT.
-     * Este filtro intercepta las peticiones HTTP y verifica la presencia
-     * y validez de tokens JWT en las cabeceras de autorización.
-     * 
-     * @param jwtUtil Utilidad para operaciones con JWT (generación, validación)
-     * @param userDetailsService Servicio para cargar detalles de usuarios
-     * @return Un filtro JwtRequestFilter configurado
-     */
-    // TODO: Implementar el filtro JwtRequestFilter
-    // @Bean
-    // public JwtRequestFilter jwtRequestFilter(JwtUtil jwtUtil, UserDetailsService userDetailsService) {
-    //     return new JwtRequestFilter(jwtUtil, userDetailsService);
-    // } 
 }

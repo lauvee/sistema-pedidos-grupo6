@@ -1,81 +1,102 @@
 package com.grupo06.sistemapedidos.controller;
 
-import java.util.List;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.grupo06.sistemapedidos.dto.UsuarioDTO;
+import com.grupo06.sistemapedidos.exception.UserError;
 import com.grupo06.sistemapedidos.service.UserService;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
-// TODO: Crear un global handler para manerjar errore, algunso de los metodos devuelven UserError
-@RestController // Indica que esta clase es un controlador REST que manejará solicitudes HTTP
-@RequestMapping("/api/user") // Define la ruta base para todos los endpoints de este controlador
+@RestController
+@RequestMapping("/auth")
 public class UserController {
+
     private final UserService userService;
 
-    public UserController (UserService userService) {
+    @Autowired
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
     /**
      * Registrar un usuario
-     * 
-     * @param usuarioDTO DTO para la transferencia de usuarios
-     * @return UsuarioDTO DTO para la trasnfarencias de usuarios
+     *
+     * @param userDTO Datos del usuario
+     * @return Respuesta con el usuario registrado
+     * @throws UserError Si ocurre un error durante el registro
      */
-    @PostMapping("/auth/register")
-    public UsuarioDTO userRegistry(@RequestParam UsuarioDTO usuarioDTO) {
-        return userService.userRegistry(usuarioDTO);
+    @PostMapping("/register")
+    @Operation(summary = "Registrar un nuevo usuario", description = "Permite registrar un usuario sin necesidad de autenticación.")
+    public ResponseEntity<UsuarioDTO> registerUser(@RequestBody UsuarioDTO userDTO) throws UserError {
+        return ResponseEntity.ok(userService.userRegistry(userDTO));
     }
 
     /**
-     * Logear un usuario
-     * 
-     * @param usuarioDTO DTO para la transferencia de usuarios
-     * @return UsuarioDTO DTO para la trasnfarencias de usuarios
+     * Login de usuario
      */
-    @PostMapping("/auth/login")
-    public UsuarioDTO userLoggin(@RequestParam UsuarioDTO usuarioDTO) {
-        return userService.userLogin(usuarioDTO);
-    } 
-
-    /***
-     * Obtener un usuario por su id
-     * 
-     * @param usuarioDTO DTO para la transferencia de usuarios
-     * @return UsuarioDTO DTO para la trasnfarencias de usuarios
-     */
-
-    @GetMapping("/{email}")
-    public UsuarioDTO getUser(@PathVariable String email) {
-        return userService.getUserByEmail(email);
+    @PostMapping("/login")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @Operation(summary = "Login de usuario", description = "Permite el inicio de sesión de un usuario existente.")
+    public ResponseEntity<UsuarioDTO> userLogin(@RequestBody UsuarioDTO usuarioDTO) {
+        return ResponseEntity.ok(userService.userLogin(usuarioDTO));
     }
-    
+
     /**
-     * Obtener todos los usuarios por su id
-     * 
-     * @param ids Lista de ids de los usuarios
-     * @return List<UsuarioDTO> Lista de DTO para la trasnfarencias de usuarios
+     * Obtener todos los usuarios registrados
+     *
+     * @return Lista de usuarios registrados
+     * @throws UserError Si ocurre un error al obtener los usuarios
      */
-    @GetMapping("/all")
-    public List<UsuarioDTO> getAllUsers(@RequestParam List<Integer> ids) {
-        return userService.getAllUsers(ids);
+    @GetMapping("/usersAll")
+    @PreAuthorize("hasRole('ADMIN')")  // Solo accesible por usuarios con el rol ADMIN
+    @Operation(summary = "Obtener todos los usuarios", description = "Este endpoint requiere autenticación JWT.")
+    public ResponseEntity<List<UsuarioDTO>> getAllUsers() throws UserError {
+        List<UsuarioDTO> usersDTO = userService.getAllRegisteredUsers();
+        return ResponseEntity.ok(usersDTO);
     }
-    
+
     /**
-     * Eliminar un usuario por su id
-     * 
-     * @param id id del usuario
-     * @return void
+     * Obtener todos los usuarios registrados
+     *
+     * @return Lista de usuarios
+     * @throws UserError Si ocurre un error al obtener los usuarios
      */
-    @DeleteMapping("/del/{id}")
-    public void deleteUser(@PathVariable Integer id) {
+    @GetMapping("/users")
+    @PreAuthorize("hasRole('ADMIN')")  // Solo accesible por usuarios con el rol ADMIN
+    @Operation(summary = "Obtener todos los usuarios", description = "Este endpoint requiere autenticación JWT.")
+    public ResponseEntity<List<UsuarioDTO>> getAllUsers(@RequestParam List<Integer> ids) throws UserError {
+        return ResponseEntity.ok(userService.getAllUsers(ids));
+    }
+
+    /**
+     * Obtener un usuario por su ID
+     *
+     * @param id ID del usuario
+     * @return UsuarioDTO con los datos del usuario
+     * @throws UserError Si ocurre un error al obtener el usuario
+     */
+    @GetMapping("/user/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")  // Accesible por usuarios con los roles USER o ADMIN
+    @Operation(summary = "Obtener un usuario por ID", description = "Este endpoint requiere autenticación JWT.")
+    public ResponseEntity<UsuarioDTO> getUserById(@PathVariable Integer id) throws UserError {
+        return ResponseEntity.ok(userService.getUserById(id));
+    }
+
+    /**
+     * Eliminar un usuario por su ID
+     *
+     * @param id ID del usuario
+     * @throws UserError Si ocurre un error al eliminar el usuario
+     */
+    @DeleteMapping("/user/{id}")
+    @PreAuthorize("hasRole('ADMIN')")  // Solo accesible por usuarios con el rol ADMIN
+    @Operation(summary = "Eliminar un usuario por ID", description = "Este endpoint requiere autenticación JWT.")
+    public ResponseEntity<Void> deleteUser(@PathVariable Integer id) throws UserError {
         userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 }

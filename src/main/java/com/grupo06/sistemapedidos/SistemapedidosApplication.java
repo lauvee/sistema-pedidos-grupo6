@@ -1,25 +1,29 @@
 package com.grupo06.sistemapedidos;
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
-import com.grupo06.sistemapedidos.config.DotenvConfig;
+import javax.sql.DataSource;
 
-/**
- * Clase principal de la aplicación Spring Boot.
- * Esta clase contiene el método main que inicia la aplicación.
- * 
- * @SpringBootApplication es una anotación que indica que esta clase es la
- * configuración principal de la aplicación Spring Boot.
- * Realiza un escaneo de componentes y configura automáticamente la aplicación.
- */
 @SpringBootApplication
 public class SistemapedidosApplication {
-	
+
 	public static void main(String[] args) {
-		// Carga las variables de entorno desde .env y las establece como propiedades del sistema
-        new DotenvConfig();
 		SpringApplication.run(SistemapedidosApplication.class, args);
+	}
+
+	@Bean
+	CommandLineRunner checkConnection(DataSource dataSource) {
+		return args -> {
+			try {
+				dataSource.getConnection();
+				System.out.println("✅ Conexión exitosa a la base de datos PostgreSQL");
+			} catch (Exception e) {
+				System.err.println("❌ Error al conectar a la base de datos: " + e.getMessage());
+			}
+		};
 	}
 
 }
