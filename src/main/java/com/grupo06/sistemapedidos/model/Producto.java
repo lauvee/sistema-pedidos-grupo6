@@ -1,6 +1,8 @@
 package com.grupo06.sistemapedidos.model;
 
 
+import java.util.List;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
@@ -11,7 +13,6 @@ import lombok.Data;
 @Table(name = "PRODUCTO", schema = "public")
 @Data
 public class Producto {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idProducto", nullable = false, unique = true)
@@ -36,4 +37,7 @@ public class Producto {
     @NotEmpty(message = "La descripción no puede estar vacía")
     @Column(name = "description", nullable = false)
     private String description;
+
+    @ManyToMany(mappedBy = "productos")
+    private List<Pedido> pedidos;
 }

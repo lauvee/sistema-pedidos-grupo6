@@ -1,6 +1,8 @@
 package com.grupo06.sistemapedidos.mapper;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 import com.grupo06.sistemapedidos.dto.UsuarioDTO;
 import com.grupo06.sistemapedidos.model.Pedido;
@@ -38,7 +40,7 @@ public class UserMapper {
     public Usuario toEntity(UsuarioDTO usuarioDTO){
 
         // TODO cargar todos los productos asociados
-        ArrayList<Pedido> pedidos = new ArrayList<>();
+        List<Pedido> pedidos = new ArrayList<>();
 
         return new Usuario(
             null,

@@ -52,16 +52,39 @@ mvn spring-boot:run
 
 ## Endpoints 🔗
 
-| Método | Endpoint         | Descripción                 | Código HTTP      |
-| ------ | ---------------- | --------------------------- | ---------------- |
-| POST   | `/auth/register` | Registro de usuario         | `201 Created`    |
-| POST   | `/auth/login`    | Inicio de sesión            | `200 OK`         |
-| GET    | `/productos`     | Obtener todos los productos | `200 OK`         |
-| POST   | `/pedidos`       | Crear nuevo pedido          | `201 Created`    |
-| PUT    | `/pedidos/{id}`  | Actualizar pedido           | `200 OK`         |
-| DELETE | `/pedidos/{id}`  | Eliminar pedido             | `204 No Content` |
+Para mas documentacion visitar la cocumentacion de Swagger en el siguiente enlace: [Swagger](http://localhost:8080/swagger-ui/index.html#/)
 
-## Mensajes de Respuesta y Códigos de Estado HTTP 🎯
+### Usuarios
+
+| Método | Endpoint                  | Descripción                | Código HTTP      |
+| ------ | ------------------------- | -------------------------- | ---------------- |
+| POST   | `/api/user/auth/register` | Registro de usuario        | `201 Created`    |
+| POST   | `/api/user/auth/login`    | Inicio de sesión           | `200 OK`         |
+| GET    | `/api/user/all`           | Obtener todos los usuarios | `200 OK`         |
+| GET    | `/api/user/{email}`       | Obtener usuario por email  | `200 OK`         |
+| DELETE | `/api/user/{id}`          | Eliminar usuario por ID    | `204 No Content` |
+
+### Productos
+
+| Método | Endpoint                 | Descripción                 | Código HTTP      |
+| ------ | ------------------------ | --------------------------- | ---------------- |
+| GET    | `/api/producto/{id}`     | Obtener producto por ID     | `200 OK`         |
+| GET    | `/api/producto/all`      | Obtener todos los productos | `200 OK`         |
+| POST   | `/api/producto`          | Crear nuevo producto        | `201 Created`    |
+| PUT    | `/api/producto`          | Actualizar producto         | `200 OK`         |
+| DELETE | `/api/producto/del/{id}` | Eliminar producto por ID    | `204 No Content` |
+
+### Pedidos
+
+| Método | Endpoint               | Descripción               | Código HTTP      |
+| ------ | ---------------------- | ------------------------- | ---------------- |
+| GET    | `/api/pedido/{id}`     | Obtener pedido por ID     | `200 OK`         |
+| GET    | `/api/pedido/all`      | Obtener todos los pedidos | `200 OK`         |
+| POST   | `/api/pedido`          | Crear nuevo pedido        | `201 Created`    |
+| PUT    | `/api/pedido`          | Actualizar pedido por ID  | `200 OK`         |
+| DELETE | `/api/del/pedido/{id}` | Eliminar pedido por ID    | `204 No Content` |
+
+## Mensajes de Respuesta y Códigos de Estado HTTP implementados 🎯
 
 - **200 OK**: Operación exitosa.
 - **201 Created**: Recurso creado satisfactoriamente.
@@ -69,3 +92,23 @@ mvn spring-boot:run
 - **401 Unauthorized**: Error de autenticación.
 - **403 Forbidden**: Acceso no autorizado.
 - **404 Not Found**: Recurso no encontrado.
+
+### Variables de entorno necesarias para la aplicación 🌍
+
+En el caso de que no quieras usar un archivo .env, puedes configurar las variables directamente en el archivo `application.properties` con lla base de datos en memoria H2, descomentando su configuración y comenmentando la de PostgreSQL.
+
+aplication.properties
+
+```properties
+spring.datasource.url=${SPRING_DATASOURCE_URL}
+spring.datasource.username=${SPRING_DATASOURCE_USERNAME}
+spring.datasource.password=${SPRING_DATASOURCE_PASSWORD}
+```
+
+.env
+
+```env
+SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/sistema_pedidos
+SPRING_DATASOURCE_USERNAME=tu_usuario
+SPRING_DATASOURCE_PASSWORD=tu_contraseña
+```
