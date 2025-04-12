@@ -4,7 +4,6 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
-import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -34,19 +33,5 @@ public class SwaggerConfig {
                                 .type(SecurityScheme.Type.HTTP)
                                 .scheme("bearer")
                                 .bearerFormat("JWT")));
-    }
-
-    /**
-     * Configura un grupo de API para los endpoints relacionados con usuarios.
-     * Los endpoints que pertenecen al grupo "usuarios" se agrupan aquí. Esto ayuda a organizar y separar los endpoints en Swagger.
-     *
-     * @return una instancia de {@link GroupedOpenApi} que agrupa los endpoints de autenticación bajo el grupo "usuarios".
-     */
-    @Bean
-    public GroupedOpenApi userApi() {
-        return GroupedOpenApi.builder()
-                .group("usuarios")
-                .pathsToMatch("/auth/**")
-                .build();
     }
 }

@@ -17,7 +17,6 @@ public class ProductMapper {
     // Convierte de Producto (entidad) a ProductDTO
     public ProductDTO toDTO(Producto producto) {
         ProductDTO dto = new ProductDTO();
-        dto.setId(producto.getId());
         dto.setName(producto.getName());
         dto.setStock(producto.getStock());
         dto.setPrice(producto.getPrice());
@@ -28,7 +27,6 @@ public class ProductMapper {
     // Convierte de ProductDTO a Producto (entidad)
     public Producto toEntity(ProductDTO dto) {
         Producto producto = new Producto();
-        producto.setId(dto.getId());
         producto.setName(dto.getName());
         producto.setStock(dto.getStock());
         producto.setPrice(dto.getPrice());

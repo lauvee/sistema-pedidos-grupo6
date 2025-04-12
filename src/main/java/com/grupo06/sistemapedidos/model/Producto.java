@@ -3,6 +3,7 @@ package com.grupo06.sistemapedidos.model;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -16,10 +17,9 @@ import lombok.Data;
  * Esta clase es parte del modelo de datos y se utiliza para mapear la tabla "PRODUCTO" en la base de datos.
  * Contiene anotaciones de JPA para la persistencia y validaciones de datos.
  * 
- * @Schema es una anotación de Swagger para documentar la API
  * @Data es una anotación de Lombok que genera automáticamente
  */
-@Schema(description = "Clase que representa un producto en el sistema.")
+@Hidden
 @Entity
 @Table(name = "PRODUCTO", schema = "public")
 @Data

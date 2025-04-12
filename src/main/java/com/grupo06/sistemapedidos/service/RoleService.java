@@ -1,6 +1,10 @@
 package com.grupo06.sistemapedidos.service;
 
 import org.springframework.stereotype.Service;
+import com.grupo06.sistemapedidos.dto.RolesDTO;
+import com.grupo06.sistemapedidos.enums.ApiError;
+import com.grupo06.sistemapedidos.exception.RequestException;
+import com.grupo06.sistemapedidos.mapper.RoleMapper;
 import com.grupo06.sistemapedidos.model.Roles;
 import com.grupo06.sistemapedidos.repository.RoleRepository;
 
@@ -12,17 +16,29 @@ import com.grupo06.sistemapedidos.repository.RoleRepository;
  */
 @Service
 public class RoleService {
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
+    private final RoleMapper roleMapper;
 
-    public RoleService(RoleRepository roleRepository) {
+    public RoleService(RoleRepository roleRepository, RoleMapper roleMapper) {
         this.roleRepository = roleRepository;
+        this.roleMapper = roleMapper;
     }
 
-    public Roles createRole(Roles role) {
-        return roleRepository.save(role);
+    public RolesDTO createRole(RolesDTO role) {
+        try {
+            Roles newRole = roleMapper.toEntity(role);
+            newRole = roleRepository.save(newRole);
+            return roleMapper.toDto(newRole);
+        } catch (Exception e) {
+             throw new RequestException(ApiError.INTERNAL_SERVER_ERROR);
+        }
     }
 
     public void deleteRole(Integer id) {
-        roleRepository.deleteById(id);
+        try {
+            roleRepository.deleteById(id);
+        } catch (Exception e) {
+             throw new RequestException(ApiError.INTERNAL_SERVER_ERROR);
+        }
     }
 }

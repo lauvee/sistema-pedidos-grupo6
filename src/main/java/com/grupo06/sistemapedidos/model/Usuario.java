@@ -6,7 +6,8 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.ToString;
+import io.swagger.v3.oas.annotations.Hidden;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +19,9 @@ import java.util.List;
  * correo electrónico, contraseña, fecha de registro,
  * total gastado y su rol.
  * 
- * @Schema es una anotación de Swagger para documentar la API
  * @Data es una anotación de Lombok que genera automáticamente
  */
-@Schema(description = "Clase que representa la entidad Usuario en la base de datos.")
+@Hidden
 @Entity
 @Table(name = "USUARIO", schema = "public")
 @Data
@@ -62,6 +62,7 @@ public class Usuario {
     @NotNull(message = "{field.null}")
     @ManyToOne
     @JoinColumn(name = "roleFK", referencedColumnName = "idRol", nullable = false)
+    @ToString.Exclude 
     private Roles role;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)

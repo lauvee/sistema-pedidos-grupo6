@@ -1,7 +1,10 @@
 package com.grupo06.sistemapedidos.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.grupo06.sistemapedidos.enums.RoleEnum;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,15 +27,21 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(NON_NULL) // Incluye solo los campos que no sean nulos al serializar a JSON
+@Schema(description = "DTO para representar un usuario")
 public class UsuarioDTO {
-
+    @Schema(description =  "Nombre del usuario", example = "Miguel Angel Duran")
     private String name;
+    @Schema(description = "Email del usuario", example = "miguelangelduran@gmial.com")
     private String email;
+    @Schema(description = "Contraseña del usuario", example = "12345678")
     private String password;
+    @Schema(description = "Fecha de registro del usuario", example = "2023-10-01")
     private LocalDate signUpDate;
+    @Schema(description = "Total gastado por el usuario", example = "1000")
     private Integer totalSpend;
-    @Getter
+    @Schema(description = "Rol del usuario", example = "ADMIN")
     private RoleEnum rol;
+    @Schema(hidden = true)
     private String token;
 
     public UsuarioDTO(String name, String email, String password, LocalDate signUpDate, RoleEnum rol) {
@@ -51,9 +60,10 @@ public class UsuarioDTO {
      * @param email El correo electrónico del usuario.
      * @param role  El rol del usuario en formato String, que será convertido a un valor de RoleEnum.
      */
-    public UsuarioDTO(String name, String email, String role) {
+    public UsuarioDTO(String name, String email, String role, String token) {
         this.name = name;
         this.email = email;
         this.rol = RoleEnum.valueOf(role); // Convierte el valor String del rol a un valor de RoleEnum
+        this.token = token; // Asigna el token al usuario
     }
 }

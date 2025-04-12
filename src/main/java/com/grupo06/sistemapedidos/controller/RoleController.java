@@ -1,10 +1,10 @@
 package com.grupo06.sistemapedidos.controller;
 
 import org.springframework.web.bind.annotation.RestController;
-
-import com.grupo06.sistemapedidos.model.Roles;
+import com.grupo06.sistemapedidos.annotations.SwaggerApiResponses;
+import com.grupo06.sistemapedidos.dto.RolesDTO;
 import com.grupo06.sistemapedidos.service.RoleService;
-
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @RequestMapping("/role")
 @RestController
+@Tag(name = "Rol", description = "Controlador para gestionar roles")
 public class RoleController {
     private RoleService roleService;
 
@@ -32,7 +33,8 @@ public class RoleController {
      * @return El rol creado.
      */
     @PostMapping()
-    public Roles postMethodName(@RequestBody Roles rol) {
+    @SwaggerApiResponses
+    public RolesDTO postMethodName(@RequestBody RolesDTO rol) {
         return roleService.createRole(rol);
     }
 
@@ -42,6 +44,7 @@ public class RoleController {
      * @param id
      */
     @DeleteMapping("/{id}")
+    @SwaggerApiResponses
     public void delRole(@PathVariable Integer id) {
         roleService.deleteRole(id);
     }

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import com.grupo06.sistemapedidos.dto.PedidoDTO;
 import com.grupo06.sistemapedidos.dto.ProductDTO;
 import com.grupo06.sistemapedidos.dto.UsuarioDTO;
+import com.grupo06.sistemapedidos.enums.ApiError;
+import com.grupo06.sistemapedidos.exception.RequestException;
 import com.grupo06.sistemapedidos.mapper.PedidoMapper;
 import com.grupo06.sistemapedidos.mapper.ProductMapper;
 import com.grupo06.sistemapedidos.mapper.UserMapper;
@@ -55,14 +57,18 @@ public class PedidoService {
      * @return PedidoDTO DTO para la transferencia de pedidos, pedido encontrado
      * @throws Exception
      */
-    public PedidoDTO getPedido(int id) throws Exception {
-        Optional<Pedido> newPedidoOptional = pedidoRepository.findById(id);
-        PedidoDTO newPedidoDTO = null;
-        if(newPedidoOptional.isPresent()){
-            Pedido newPedido = newPedidoOptional.get();
-            newPedidoDTO = pedidoMapper.toDTO(newPedido);
+    public PedidoDTO getPedido(int id)  {
+        try {
+            Optional<Pedido> newPedidoOptional = pedidoRepository.findById(id);
+            PedidoDTO newPedidoDTO = null;
+            if(newPedidoOptional.isPresent()){
+                Pedido newPedido = newPedidoOptional.get();
+                newPedidoDTO = pedidoMapper.toDTO(newPedido);
+            }
+            return newPedidoDTO;
+        } catch (Exception e) {
+           throw new RequestException(ApiError.INTERNAL_SERVER_ERROR);
         }
-        return newPedidoDTO;
     }
     
      /**
@@ -71,13 +77,18 @@ public class PedidoService {
      * @return List<PedidoDTO> DTO para la transferencia de pedidos
      * @throws Exception
      */
-    public List<PedidoDTO> getAllPedidos() throws Exception {
-        List<Pedido> listaPedidos = pedidoRepository.findAll();
+    public List<PedidoDTO> getAllPedidos()  {
+        try {
+            List<Pedido> listaPedidos = pedidoRepository.findAll();
         List<PedidoDTO> listaPedidosDTO = listaPedidos.stream()
                 .map(pedidoMapper::toDTO)
                 .toList();
 
         return listaPedidosDTO;
+        } catch (Exception e) {
+            throw new RequestException(ApiError.INTERNAL_SERVER_ERROR);
+        }
+        
     }
 
       /**
@@ -87,18 +98,22 @@ public class PedidoService {
      * @return PedidoDTO DTO para la transferencia de pedidos
      * @throws Exception
      */
-    public PedidoDTO postPedido(PedidoDTO pedidoDTO) throws Exception {
-        // Añadmir un evento al topic de Kafka
-        String eventMessage = "Nuevo pedido de usuario " + pedidoDTO.getUsuario() + " con productos " + pedidoDTO.getProductos();
-        kafkaProducerService.sendCreationNotification(eventMessage);
+    public PedidoDTO postPedido(PedidoDTO pedidoDTO) {
+        try {
+            // Añadmir un evento al topic de Kafka
+            String eventMessage = "Nuevo pedido de usuario " + pedidoDTO.getUsuario() + " con productos " + pedidoDTO.getProductos();
+            kafkaProducerService.sendCreationNotification(eventMessage);
 
-        Usuario usuarioEntity = getUsuarioEntityByFK(pedidoDTO);
-        List<Producto> listaProductos = getListProductosFK(pedidoDTO);
+            Usuario usuarioEntity = getUsuarioEntityByFK(pedidoDTO);
+            List<Producto> listaProductos = getListProductosFK(pedidoDTO);
 
-        // Devemos pasarle el usuario asoicado al pedido y la lista de productos
-        Pedido newPedido = pedidoMapper.toEntity(usuarioEntity, listaProductos);
-        Pedido pedidoSave = pedidoRepository.save(newPedido);
-        return pedidoMapper.toDTO(pedidoSave);
+            // Devemos pasarle el usuario asoicado al pedido y la lista de productos
+            Pedido newPedido = pedidoMapper.toEntity(usuarioEntity, listaProductos);
+            Pedido pedidoSave = pedidoRepository.save(newPedido);
+            return pedidoMapper.toDTO(pedidoSave);
+        } catch (Exception e) {
+            throw new RequestException(ApiError.INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
@@ -108,16 +123,20 @@ public class PedidoService {
      * @return PedidoDTO DTO para la transferencia de pedidos
      * @throws Exception
      */
-    public PedidoDTO putPedido(PedidoDTO pedidoDTO) throws Exception{
-        String eventMessage = "Pedido modificado de usuario " + pedidoDTO.getUsuario() + " con productos " + pedidoDTO.getProductos();
-        kafkaProducerService.sendModificationNotification(eventMessage);
+    public PedidoDTO putPedido(PedidoDTO pedidoDTO) {
+        try {
+            String eventMessage = "Pedido modificado de usuario " + pedidoDTO.getUsuario() + " con productos " + pedidoDTO.getProductos();
+            kafkaProducerService.sendModificationNotification(eventMessage);
 
-        Usuario usuarioEntity = getUsuarioEntityByFK(pedidoDTO);
-        List<Producto> listaProductos = getListProductosFK(pedidoDTO);
+            Usuario usuarioEntity = getUsuarioEntityByFK(pedidoDTO);
+            List<Producto> listaProductos = getListProductosFK(pedidoDTO);
 
-        Pedido newPedido = pedidoMapper.toEntity(usuarioEntity, listaProductos);
-        Pedido pedidoSave = pedidoRepository.save(newPedido);
-        return pedidoMapper.toDTO(pedidoSave);
+            Pedido newPedido = pedidoMapper.toEntity(usuarioEntity, listaProductos);
+            Pedido pedidoSave = pedidoRepository.save(newPedido);
+            return pedidoMapper.toDTO(pedidoSave);
+        } catch (Exception e) {
+            throw new RequestException(ApiError.INTERNAL_SERVER_ERROR);
+        }
     }
     
     /**
@@ -126,10 +145,15 @@ public class PedidoService {
      * @param id ID del pedido a eliminar
      */
     public void deletePedido(Integer id){
-        String eventMessage = "Pedido eliminado con id " + id;
-        kafkaProducerService.sendCancellationNotification(eventMessage);
-        // Eliminar el pedido de la base de datos
-        pedidoRepository.deleteById(id);
+        try {
+            String eventMessage = "Pedido eliminado con id " + id;
+            kafkaProducerService.sendCancellationNotification(eventMessage);
+            // Eliminar el pedido de la base de datos
+            pedidoRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new RequestException(ApiError.INTERNAL_SERVER_ERROR);
+        }
+        
     }
 
     /// Utilidades
@@ -139,13 +163,17 @@ public class PedidoService {
      * @param pedidoDTO DTO para la transferencia de pedidos, se compone de el id del usuario y una lista de ids de productos
      * @return List<Producto> lista de productos asociados al pedido
      */
-    public List<Producto> getListProductosFK(PedidoDTO pedidoDTO) throws Exception {
-        List<Producto> listaProductos = new ArrayList<>();
-        for(Integer idPedido : pedidoDTO.getProductos()){
-            ProductDTO childPedido = productService.findById(idPedido);
-            listaProductos.add(productMapper.toEntity(childPedido));
+    public List<Producto> getListProductosFK(PedidoDTO pedidoDTO) {
+        try {
+            List<Producto> listaProductos = new ArrayList<>();
+            for(Integer idPedido : pedidoDTO.getProductos()){
+                ProductDTO childPedido = productService.findById(idPedido);
+                listaProductos.add(productMapper.toEntity(childPedido));
+            }
+            return listaProductos;
+        } catch (Exception e) {
+            throw new RequestException(ApiError.INTERNAL_SERVER_ERROR);
         }
-        return listaProductos;
     }
 
     /**
@@ -155,8 +183,13 @@ public class PedidoService {
      * @return Usuario usuario asociado al pedido
      */
     public Usuario getUsuarioEntityByFK(PedidoDTO pedidoDTO) throws Exception {
-        UsuarioDTO usuario = userService.getUserById(pedidoDTO.getUsuario());
-        Usuario usuarioEntity = userMapper.toEntity(usuario);
-        return usuarioEntity;
+        try {
+            UsuarioDTO usuario = userService.getUserById(pedidoDTO.getUsuario());
+            Usuario usuarioEntity = userMapper.toEntity(usuario);
+            return usuarioEntity;
+        } catch (Exception e) {
+            throw new RequestException(ApiError.INTERNAL_SERVER_ERROR);
+        }
+        
     }
 }
