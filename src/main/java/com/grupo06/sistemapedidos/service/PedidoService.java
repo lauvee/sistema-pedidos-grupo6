@@ -5,15 +5,15 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 import com.grupo06.sistemapedidos.dto.PedidoDTO;
+import com.grupo06.sistemapedidos.dto.ProductDTO;
 import com.grupo06.sistemapedidos.dto.UsuarioDTO;
 import com.grupo06.sistemapedidos.mapper.PedidoMapper;
+import com.grupo06.sistemapedidos.mapper.ProductMapper;
 import com.grupo06.sistemapedidos.mapper.UserMapper;
 import com.grupo06.sistemapedidos.model.Pedido;
 import com.grupo06.sistemapedidos.model.Producto;
 import com.grupo06.sistemapedidos.model.Usuario;
 import com.grupo06.sistemapedidos.repository.PedidoRepository;
-import com.grupo06.sistemapedidos.repository.ProductRepository;
-
 
 /**
  * Clase de servicio para manejar la lógica de negocio relacionada con los pedidos.
@@ -23,24 +23,29 @@ import com.grupo06.sistemapedidos.repository.ProductRepository;
  */
 @Service
 public class PedidoService {
-     /**
+    /**
      * PedidoMapper es un objeto que se encarga de convertir entre entidades y DTOs.
      * PedidoRepository es un objeto que se encarga de interactuar con la base de datos.
      * ProductRepository es un objeto que se encarga de interactuar con la base de datos de productos.
      * UserService es un objeto que se encarga de manejar la lógica de negocio relacionada con los usuarios.
      * UserMapper es un objeto que se encarga de convertir entre entidades y DTOs de usuarios.
      */
-    private PedidoMapper pedidoMapper; 
-    private PedidoRepository pedidoRepository;
-    private ProductRepository productRepository;
-    private UserService userService;
-    private UserMapper userMapper;
+    private final PedidoRepository pedidoRepository;
+    private final PedidoMapper pedidoMapper; 
+    private final UserService userService;
+    private final UserMapper userMapper;
+    private final ProductService productService;
+    private final ProductMapper productMapper;
+    private final KafkaProducerService kafkaProducerService;
 
-    public PedidoService (PedidoMapper pedidoMapper, UserService userService, UserMapper userMapper, ProductRepository productRepository){
+    public PedidoService (PedidoMapper pedidoMapper, PedidoRepository pedidoRepository, UserService userService, UserMapper userMapper, ProductService productService, ProductMapper productMapper, KafkaProducerService kafkaProducerService) {
+        this.pedidoRepository = pedidoRepository;
         this.pedidoMapper = pedidoMapper;
         this.userService = userService;
         this.userMapper = userMapper;
-        this.productRepository = productRepository;
+        this.productService = productService;
+        this.productMapper = productMapper;
+        this.kafkaProducerService = kafkaProducerService;
     }
 
     /**
@@ -83,6 +88,10 @@ public class PedidoService {
      * @throws Exception
      */
     public PedidoDTO postPedido(PedidoDTO pedidoDTO) throws Exception {
+        // Añadmir un evento al topic de Kafka
+        String eventMessage = "Nuevo pedido de usuario " + pedidoDTO.getUsuario() + " con productos " + pedidoDTO.getProductos();
+        kafkaProducerService.sendCreationNotification(eventMessage);
+
         Usuario usuarioEntity = getUsuarioEntityByFK(pedidoDTO);
         List<Producto> listaProductos = getListProductosFK(pedidoDTO);
 
@@ -100,8 +109,12 @@ public class PedidoService {
      * @throws Exception
      */
     public PedidoDTO putPedido(PedidoDTO pedidoDTO) throws Exception{
+        String eventMessage = "Pedido modificado de usuario " + pedidoDTO.getUsuario() + " con productos " + pedidoDTO.getProductos();
+        kafkaProducerService.sendModificationNotification(eventMessage);
+
         Usuario usuarioEntity = getUsuarioEntityByFK(pedidoDTO);
         List<Producto> listaProductos = getListProductosFK(pedidoDTO);
+
         Pedido newPedido = pedidoMapper.toEntity(usuarioEntity, listaProductos);
         Pedido pedidoSave = pedidoRepository.save(newPedido);
         return pedidoMapper.toDTO(pedidoSave);
@@ -113,6 +126,9 @@ public class PedidoService {
      * @param id ID del pedido a eliminar
      */
     public void deletePedido(Integer id){
+        String eventMessage = "Pedido eliminado con id " + id;
+        kafkaProducerService.sendCancellationNotification(eventMessage);
+        // Eliminar el pedido de la base de datos
         pedidoRepository.deleteById(id);
     }
 
@@ -126,11 +142,8 @@ public class PedidoService {
     public List<Producto> getListProductosFK(PedidoDTO pedidoDTO) throws Exception {
         List<Producto> listaProductos = new ArrayList<>();
         for(Integer idPedido : pedidoDTO.getProductos()){
-            Optional<Producto> childPedido = productRepository.findById(idPedido);
-            if(!childPedido.isPresent()){
-                throw new Error();
-            }
-            listaProductos.add(childPedido.get());
+            ProductDTO childPedido = productService.findById(idPedido);
+            listaProductos.add(productMapper.toEntity(childPedido));
         }
         return listaProductos;
     }

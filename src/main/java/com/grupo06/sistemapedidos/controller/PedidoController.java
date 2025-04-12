@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RestController // Indica que esta clase es un controlador REST que manejará solicitudes HTTP
 @RequestMapping("/api/pedido") // Define la ruta base para todos los endpoints de este controlador
 public class PedidoController {
-    PedidoService pedidoService; 
+    private final PedidoService pedidoService; 
 
-    public PedidoController (PedidoService pedidoService) throws Exception {
+    public PedidoController (PedidoService pedidoService) {
         this.pedidoService = pedidoService;
     }
 
