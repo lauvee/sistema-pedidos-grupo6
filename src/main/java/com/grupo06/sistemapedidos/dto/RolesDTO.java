@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,11 +17,8 @@ import lombok.NoArgsConstructor;
  * 
  * @Data es una anotación de Lombok que genera automáticamente
  */
-@Entity
-@Table(name = "ROLES", schema = "public")
-@NoArgsConstructor
-@AllArgsConstructor
 @Data
+@NoArgsConstructor
 @Schema(description = "DTO para representar un rol")
 public class RolesDTO {
     @NotNull(message = "El nombre del rol no puede ser nulo")

@@ -1,4 +1,4 @@
-package com.grupo06.sistemapedidos.Utils;
+package com.grupo06.sistemapedidos.utilities;
 
 /**
  * Clase utilitaria para cambiar el color de los mensajes en la consola.

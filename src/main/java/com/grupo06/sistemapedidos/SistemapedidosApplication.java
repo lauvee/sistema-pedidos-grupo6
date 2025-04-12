@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.client.RestTemplate;
-import com.grupo06.sistemapedidos.Utils.ColorUtils;
+import com.grupo06.sistemapedidos.utilities.ColorUtils;
 import java.net.Socket;
 import javax.sql.DataSource;
 
