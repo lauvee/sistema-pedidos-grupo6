@@ -10,8 +10,8 @@ import java.util.Optional;
 /**
  * UserRepository es una interfaz que extiende JpaRepository para realizar operaciones CRUD en la entidad User.
  * Proporciona métodos para buscar usuarios por ID, correo electrónico, nombre de usuario y rol.
- * <p>
- * Está marcada con la anotación @Repository para que Spring la detecte como un componente de acceso a datos.
+ *
+ * @Repository Anotación de Spring que indica que esta interfaz es un repositorio de acceso a datos.
  */
 @Repository
 public interface UserRepository extends JpaRepository<Usuario, Integer> {

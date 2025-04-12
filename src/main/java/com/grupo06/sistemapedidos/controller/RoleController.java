@@ -11,7 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-
+/**
+ * Controlador REST para manejar las operaciones relacionadas con los roles.
+ * Permite crear y eliminar roles en el sistema.
+ */
 @RequestMapping("/role")
 @RestController
 public class RoleController {
@@ -21,11 +24,23 @@ public class RoleController {
         this.roleService = roleService;
     }
 
+    /**
+     * Crea un nuevo rol en el sistema.
+     * 
+     * @param rol Objeto Roles que representa el rol a crear, deve ser unico y de tipo RoleEnum
+     * RoleEnum puede ser ADMIN o USER o GUEST, esto es útil para solo tener roles predefinidos en el código.
+     * @return El rol creado.
+     */
     @PostMapping()
-    public Roles postMethodName(@RequestBody Roles entity) {
-        return roleService.createRole(entity);
+    public Roles postMethodName(@RequestBody Roles rol) {
+        return roleService.createRole(rol);
     }
 
+    /**
+     * Elimina un rol del sistema por su ID.
+     * 
+     * @param id
+     */
     @DeleteMapping("/{id}")
     public void delRole(@PathVariable Integer id) {
         roleService.deleteRole(id);

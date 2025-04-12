@@ -4,11 +4,22 @@ import java.util.List;
 
 import com.grupo06.sistemapedidos.enums.RoleEnum;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+/**
+ * Clase que representa un rol en el sistema en la base de datos, osea la entidad.
+ * Un rol tiene un nombre y una descripción.
+ * Esta clase es parte del modelo de datos y se utiliza para mapear la tabla "ROLES" en la base de datos.
+ * Contiene anotaciones de JPA para la persistencia y validaciones de datos.
+ * 
+ * @Schema es una anotación de Swagger para documentar la API
+ * @Data es una anotación de Lombok que genera automáticamente
+ */
+@Schema(description = "Clase que representa un rol en el sistema.")
 @Entity
 @Table(name = "ROLES", schema = "public")
 @Data

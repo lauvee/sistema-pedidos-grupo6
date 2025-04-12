@@ -5,6 +5,12 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+/**
+ * Data Transfer Object (DTO) para representar un producto.
+ * Este DTO se utiliza para transferir información de producto entre la capa de servicio y la capa de presentación.
+ * Contiene los campos necesarios para describir un producto, incluyendo su ID, nombre, stock, precio y descripción.
+ * Se utilizan anotaciones de validación para asegurar que los datos sean correctos antes de ser procesados.
+ */
 @Data
 public class ProductDTO {
 

@@ -35,6 +35,14 @@ public class AuthController {
             description = "Genera un token JWT para el usuario basado en su email. Este token se utilizará para la autenticación en otros endpoints.",
             security = @SecurityRequirement(name = "bearerAuth")
     )
+
+    /**
+     * Genera un token JWT para el usuario basado en su email.
+     * Este token se utilizará para la autenticación en otros endpoints.
+     * 
+     * @param usuarioDTO
+     * @return
+     */
     public String createToken(@RequestBody UsuarioDTO usuarioDTO) {
         String email = usuarioDTO.getEmail();
         // Buscar el usuario en la base de datos usando el email

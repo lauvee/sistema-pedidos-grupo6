@@ -1,5 +1,9 @@
 package com.grupo06.sistemapedidos.Utils;
 
+/**
+ * Clase utilitaria para cambiar el color de los mensajes en la consola.
+ * Contiene métodos para pintar mensajes en verde y rojo.
+ */
 public class ColorUtils {
 
     public static String pintarVerde(String mensaje) {

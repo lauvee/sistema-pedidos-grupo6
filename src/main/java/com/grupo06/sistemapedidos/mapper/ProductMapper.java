@@ -6,6 +6,11 @@ import org.springframework.stereotype.Component;
 import com.grupo06.sistemapedidos.dto.ProductDTO;
 import com.grupo06.sistemapedidos.model.Producto;
 
+/**
+ * Clase de mapeo para convertir entre entidades de Producto y su representación DTO.
+ * Esta clase se encarga de transformar los datos entre la capa de persistencia y la capa de presentación.
+ * Utiliza el patrón Mapper para facilitar la conversión entre diferentes representaciones de datos.
+ */
 @Component
 public class ProductMapper {
 

@@ -8,6 +8,11 @@ import com.grupo06.sistemapedidos.model.Pedido;
 import com.grupo06.sistemapedidos.model.Producto;
 import com.grupo06.sistemapedidos.model.Usuario;
 
+/**
+ * Clase de mapeo para convertir entre entidades de Pedido y su representación DTO.
+ * Esta clase se encarga de transformar los datos entre la capa de persistencia y la capa de presentación.
+ * Utiliza el patrón Mapper para facilitar la conversión entre diferentes representaciones de datos.
+ */
 @Component
 public class PedidoMapper {
     public PedidoDTO toDTO(Pedido usuario){

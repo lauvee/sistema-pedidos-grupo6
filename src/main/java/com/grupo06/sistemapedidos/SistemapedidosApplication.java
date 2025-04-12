@@ -7,13 +7,18 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.client.RestTemplate;
-
 import com.grupo06.sistemapedidos.Utils.ColorUtils;
-
 import java.net.Socket;
-
 import javax.sql.DataSource;
 
+/**
+ * Clase principal de la aplicación Spring Boot
+ * @SpringBootApplication es una anotación que indica que esta clase es la
+ * clase principal de la aplicación y habilita la configuración automática de Spring
+ * 
+ * @Been es una anotación que indica que el método devuelve un objeto que debe ser
+ * administrado por el contenedor de Spring
+ */
 @SpringBootApplication
 public class SistemapedidosApplication {
 
@@ -21,7 +26,11 @@ public class SistemapedidosApplication {
 		SpringApplication.run(SistemapedidosApplication.class, args);
 	}
 
-	// Verificamos la conexión con la base de datos PostgreSQL
+	/**
+	 * Verificamos la conexión con la base de datos PostgreSQL
+	 * 
+	 * @param dataSoure es el objeto que contiene la conexión a la base de datos
+	 */
 	@Bean
 	CommandLineRunner checkConnection(DataSource dataSource) {
 		return args -> {
@@ -34,11 +43,16 @@ public class SistemapedidosApplication {
 		};
 	}
 
-	// VErificamos la conexión con Kafka
+	/**
+	 * Verificamos la conexión con Kafka
+	 * 
+	 * @param kafkaTemplate es el objeto que contiene la conexión a Kafka
+	 */
 	@Bean
 	CommandLineRunner checkKafka(KafkaTemplate<String, String> kafkaTemplate) {
 		return args -> {
 			try {
+				// Enviamos el mensaje al topic "test-topic" para verificar la conexión
 				kafkaTemplate.send("test-topic", "Mensaje de prueba desde la aplicación").get();
 				System.out.println(ColorUtils.pintarVerde("Kafka se inició correctamente y se pudo enviar mensaje a 'test-topic'"));
 			} catch (Exception e) {
@@ -47,13 +61,15 @@ public class SistemapedidosApplication {
 		};
 	}
 
-	// Verificamos la conexión con Kafka UI
+	/**
+	 * Verificamos la conexión con Kafka UI 
+	 */
 	@Bean
     CommandLineRunner checkKafkaUI() {
         return args -> {
             try {
                 RestTemplate restTemplate = new RestTemplate();
-                String url = "http://localhost:8081"; // URL de Kafka UI
+                String url = "http://localhost:8081"; // En la 80801 se encuentra la UI de Swagger
                 ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
                 if (response.getStatusCode().is2xxSuccessful()) {
                     System.out.println(ColorUtils.pintarVerde("Kafka UI está funcionando correctamente"));
@@ -66,7 +82,9 @@ public class SistemapedidosApplication {
         };
     }
 
-	// Verificamos la conexión con Zookeeper
+	/**
+	 * Verificamos la conexión con Zookeeper
+	 */
 	@Bean
 	CommandLineRunner checkZookeeper() {
 		return args -> {

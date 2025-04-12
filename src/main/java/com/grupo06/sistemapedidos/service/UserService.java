@@ -16,9 +16,10 @@ import java.util.Optional;
 
 /**
  * Servicio de gestión de usuarios.
- *
  * Esta clase proporciona métodos para registrar, autenticar, y administrar usuarios, así como para recuperar datos relacionados
  * con usuarios desde la base de datos. Además, maneja errores personalizados relacionados con las operaciones de usuarios.
+* 
+*@Service indica que esta clase es un servicio de Spring y permite la inyección de dependencias.
  */
 @Service
 public class UserService {
@@ -83,7 +84,7 @@ public class UserService {
 
                 // Verificar si la contraseña es correcta
                 if (passwordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
-                    return new UsuarioDTO(user.getName(), user.getEmail());
+                    return new UsuarioDTO(user.getName(), user.getEmail(), user.getRole().toString());
                 } else {
                     throw new UserError("Contraseña incorrecta");
                 }

@@ -5,33 +5,26 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-
+import lombok.Data;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * Clase que representa la entidad Usuario en la base de datos.
  * Contiene información sobre el usuario, incluyendo su nombre,
  * correo electrónico, contraseña, fecha de registro,
  * total gastado y su rol.
- *
- * @Schema Permite configurar la documentación de Swagger para esta entidad
- * @Getter, @Setter y @NoArgsConstructor son anotaciones de Lombok para generar automáticamente
- * los getters, setters y constructores sin argumentos
+ * 
+ * @Schema es una anotación de Swagger para documentar la API
+ * @Data es una anotación de Lombok que genera automáticamente
  */
+@Schema(description = "Clase que representa la entidad Usuario en la base de datos.")
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
 @Table(name = "USUARIO", schema = "public")
+@Data
 public class Usuario {
 
     @Id

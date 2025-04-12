@@ -14,8 +14,8 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 /**
  * Data Transfer Object (DTO) para representar los datos de un Usuario.
  * Este DTO se utiliza para transferir información de usuario entre la capa de servicio y la capa de presentación.
- *
- * @Schema Permite configurar la documentación de Swagger para este DTO.
+ * Se omiten los campos id, password
+ * 
  * @Getter, @Setter, @AllArgsConstructor y @NoArgsConstructor son anotaciones de Lombok que generan automáticamente
  * los getters, setters, y constructores con todos los argumentos, y sin argumentos.
  */
@@ -35,15 +35,6 @@ public class UsuarioDTO {
     private RoleEnum rol;
     private String token;
 
-    /**
-     * Constructor utilizado para la conversión desde entidad Usuario a UsuarioDTO.
-     *
-     * @param name       El nombre del usuario.
-     * @param email      El correo electrónico del usuario.
-     * @param password   La contraseña del usuario.
-     * @param signUpDate La fecha de registro del usuario.
-     * @param rol        El rol asignado al usuario (RoleEnum).
-     */
     public UsuarioDTO(String name, String email, String password, LocalDate signUpDate, RoleEnum rol) {
         this.name = name;
         this.email = email;
@@ -51,17 +42,6 @@ public class UsuarioDTO {
         this.password = password;
         this.totalSpend = 0; // El gasto inicial es 0
         this.rol = rol != null ? rol : RoleEnum.GUEST;  // Si el rol es nulo, se asigna el rol por defecto GUEST
-    }
-
-    /**
-     * Constructor para crear un DTO de usuario en procesos de registro e inicio de sesión.
-     *
-     * @param name  El nombre del usuario.
-     * @param email El correo electrónico del usuario.
-     */
-    public UsuarioDTO(String name, String email) {
-        this.name = name;
-        this.email = email;
     }
 
     /**

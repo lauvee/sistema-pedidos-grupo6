@@ -9,6 +9,12 @@ import com.grupo06.sistemapedidos.mapper.ProductMapper;
 import com.grupo06.sistemapedidos.model.Producto;
 import com.grupo06.sistemapedidos.repository.ProductRepository;
 
+/**
+ * Clase de servicio para manejar la lógica de negocio relacionada con los productos.
+ * Proporciona métodos para obtener, crear y eliminar productos.
+ * 
+* @Service indica que esta clase es un servicio de Spring y permite la inyección de dependencias.
+ */
 @Service
 public class ProductService {
   
