@@ -1,10 +1,11 @@
 package com.grupo06.sistemapedidos.controller;
 
+import com.grupo06.sistemapedidos.annotations.SwaggerApiResponses;
 import com.grupo06.sistemapedidos.dto.UsuarioDTO;
-import com.grupo06.sistemapedidos.exception.UserError;
 import com.grupo06.sistemapedidos.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -12,12 +13,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/user")
+@Tag(name = "Usuario", description = "Controlador para gestionar usuarios")
 public class UserController {
 
     private final UserService userService;
 
-    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
@@ -29,18 +30,20 @@ public class UserController {
      * @return Respuesta con el usuario registrado
      * @throws UserError Si ocurre un error durante el registro
      */
-    @PostMapping("/register")
+    @PostMapping("auth/register")
     @Operation(summary = "Registrar un nuevo usuario", description = "Permite registrar un usuario sin necesidad de autenticación.")
-    public ResponseEntity<UsuarioDTO> registerUser(@RequestBody UsuarioDTO userDTO) throws UserError {
+    @SwaggerApiResponses
+    public ResponseEntity<UsuarioDTO> registerUser(@RequestBody UsuarioDTO userDTO) {
         return ResponseEntity.ok(userService.userRegistry(userDTO));
     }
 
     /**
      * Login de usuario
      */
-    @PostMapping("/login")
+    @PostMapping("auth/login")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @Operation(summary = "Login de usuario", description = "Permite el inicio de sesión de un usuario existente.")
+    @SwaggerApiResponses
     public ResponseEntity<UsuarioDTO> userLogin(@RequestBody UsuarioDTO usuarioDTO) {
         return ResponseEntity.ok(userService.userLogin(usuarioDTO));
     }
@@ -49,26 +52,26 @@ public class UserController {
      * Obtener todos los usuarios registrados
      *
      * @return Lista de usuarios registrados
-     * @throws UserError Si ocurre un error al obtener los usuarios
      */
     @GetMapping("/usersAll")
     @PreAuthorize("hasRole('ADMIN')")  // Solo accesible por usuarios con el rol ADMIN
     @Operation(summary = "Obtener todos los usuarios", description = "Este endpoint requiere autenticación JWT.")
-    public ResponseEntity<List<UsuarioDTO>> getAllUsers() throws UserError {
+    @SwaggerApiResponses
+    public ResponseEntity<List<UsuarioDTO>> getAllUsers() {
         List<UsuarioDTO> usersDTO = userService.getAllRegisteredUsers();
         return ResponseEntity.ok(usersDTO);
     }
 
     /**
-     * Obtener todos los usuarios registrados
+     * Obtener todos los usuarios registrados con la id especificada
      *
      * @return Lista de usuarios
-     * @throws UserError Si ocurre un error al obtener los usuarios
      */
-    @GetMapping("/users")
+    @GetMapping("/usersAll/{ids}")
     @PreAuthorize("hasRole('ADMIN')")  // Solo accesible por usuarios con el rol ADMIN
     @Operation(summary = "Obtener todos los usuarios", description = "Este endpoint requiere autenticación JWT.")
-    public ResponseEntity<List<UsuarioDTO>> getAllUsers(@RequestParam List<Integer> ids) throws UserError {
+    @SwaggerApiResponses
+    public ResponseEntity<List<UsuarioDTO>> getAllUsers(@RequestParam List<Integer> ids) {
         return ResponseEntity.ok(userService.getAllUsers(ids));
     }
 
@@ -79,10 +82,11 @@ public class UserController {
      * @return UsuarioDTO con los datos del usuario
      * @throws UserError Si ocurre un error al obtener el usuario
      */
-    @GetMapping("/user/{id}")
+    @GetMapping("/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")  // Accesible por usuarios con los roles USER o ADMIN
     @Operation(summary = "Obtener un usuario por ID", description = "Este endpoint requiere autenticación JWT.")
-    public ResponseEntity<UsuarioDTO> getUserById(@PathVariable Integer id) throws UserError {
+    @SwaggerApiResponses
+    public ResponseEntity<UsuarioDTO> getUserById(@PathVariable Integer id) {
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
@@ -92,10 +96,11 @@ public class UserController {
      * @param id ID del usuario
      * @throws UserError Si ocurre un error al eliminar el usuario
      */
-    @DeleteMapping("/user/{id}")
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")  // Solo accesible por usuarios con el rol ADMIN
     @Operation(summary = "Eliminar un usuario por ID", description = "Este endpoint requiere autenticación JWT.")
-    public ResponseEntity<Void> deleteUser(@PathVariable Integer id) throws UserError {
+    @SwaggerApiResponses
+    public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }

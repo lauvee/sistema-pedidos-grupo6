@@ -23,6 +23,8 @@ Canal de Twitch: [Bytes Colaborativos](https://www.twitch.tv/api/bytescolaborati
 - **Spring Boot**: Framework principal para el desarrollo del backend.
 - **JPA (Hibernate)**: Mapeo objeto-relacional para la persistencia de datos.
 - **Apache Kafka**: Comunicación asincrónica y notificaciones.
+- **Swagger**: Documentación de la API REST.
+- **Kafka UI**: Interfaz gráfica para la gestión de Kafka.
 - **Spring Security & JWT**: Autenticación y autorización seguras.
 - **PostgreSQL**: Motor de base de datos.
 - **Postman**: Testing y documentación de endpoints.
@@ -34,11 +36,20 @@ Canal de Twitch: [Bytes Colaborativos](https://www.twitch.tv/api/bytescolaborati
 git clone https://github.com/tuusuario/sistema-pedidos.git
 cd sistema-pedidos
 
-# Configura la base de datos en application.properties o application.yml.
-# Crea el archivo .env con las variables necesarias.
+# Configura la base de datos en application.properties con el archivo application-demo.propierties con las variables necesarias, y renombralo a application.properties
+# Estas son las variables que necesitas configurar:
+jwt.secret.key=demo_key
+spring.datasource.username=demo_user
+spring.datasource.password=demo_password
+
+# Enciende el servidor de Kafka, Kafka UI y Zookeeper con Docker:
+docker-compose up -d # -d para que se ejecute en segundo plano
 
 # Ejecuta la aplicación
 mvn spring-boot:run
+
+# YA puedes acceder a al adocumentacion de la api con Swagger en el siguiente enlace: http://localhost:8080/swagger-ui/index.html#/ y a la base de datos en memoria H2 en http://localhost:8080/h2-console
+# O acceder a la interfaz de Kafka UI en http://localhost:8080/kafka-ui
 ```
 
 ## Funcionalidades Principales ✅
@@ -49,6 +60,9 @@ mvn spring-boot:run
 - **Notificaciones Asincrónicas**: Eventos de pedidos con Apache Kafka.
 - **Seguridad**: Control de acceso basado en roles (usuario y administrador).
 - **Documentación y Testing**: Pruebas con Postman y Swagger.
+
+- Monitorea la actividad de Kafka y los mensajes enviados a través de la interfaz de **Kafka UI**.
+  Puedes acceder a la interfaz de Kafka UI en el siguiente enlace: [Kafka UI](http://localhost:8080/kafka-ui)
 
 ## Endpoints 🔗
 

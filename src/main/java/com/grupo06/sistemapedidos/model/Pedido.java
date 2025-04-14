@@ -1,19 +1,26 @@
 package com.grupo06.sistemapedidos.model;
 
-
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
+/**
+ * Clase que representa un pedido en el sistema en la base de datos, osea la entidad.
+ * Un pedido está asociado a un usuario y puede contener múltiples productos.
+ * Esta clase es parte del modelo de datos y se utiliza para mapear la tabla "PEDIDO" en la base de datos.
+ * Contiene anotaciones de JPA para la persistencia y validaciones de datos.
+ * 
+ * @Data es una anotación de Lombok que genera automáticamente
+ */
+@Hidden
 @Entity
 @Table(name = "PEDIDO", schema = "public")
+@Data
 @AllArgsConstructor
-@Getter
-@Setter
 public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
