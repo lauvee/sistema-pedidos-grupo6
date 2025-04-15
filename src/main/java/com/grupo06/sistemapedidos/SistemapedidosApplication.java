@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.web.client.RestTemplate;
 import com.grupo06.sistemapedidos.utilities.ColorUtils;
 import java.net.Socket;
@@ -15,10 +16,11 @@ import javax.sql.DataSource;
  * Clase principal de la aplicación Spring Boot
  * @SpringBootApplication es una anotación que indica que esta clase es la
  * clase principal de la aplicación y habilita la configuración automática de Spring
- * 
+ * @EnableRetry es una anotación que habilita la funcionalidad de reintento en los métodos
  * @Been es una anotación que indica que el método devuelve un objeto que debe ser
  * administrado por el contenedor de Spring
  */
+@EnableRetry
 @SpringBootApplication
 public class SistemapedidosApplication {
 

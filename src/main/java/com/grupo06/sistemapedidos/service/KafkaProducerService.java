@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
  * son responsables de serializar los mensajes y enviarlos a las particiones correspondientes, facilitando la distribución
  * y entrega de la información de forma efectiva.
  * </p>
+ * 
+ * {@link Service} indica que esta clase es un servicio de Spring, lo que permite la inyección de dependencias y
+ * la gestión del ciclo de vida del bean.
  */
 @Service
 public class KafkaProducerService {
@@ -35,8 +38,17 @@ public class KafkaProducerService {
      *
      * @param message el mensaje a enviar que indica la creación de un pedido.
      */
-    public void sendCreationNotification(String message) {
+    public void sendOrderCreated(String message) {
         kafkaTemplate.send("pedido-creado", message);
+    }
+
+    /**
+     * Envía una notificación de procesamiento de pedido al tópico "pedido-procesado".
+     * 
+     * @param message el mensaje a enviar que indica el procesamiento de un pedido.
+     */
+    public void sendOrderProcessed(String message) {
+        kafkaTemplate.send("pedido-procesado", message);
     }
     
     /**
@@ -55,5 +67,14 @@ public class KafkaProducerService {
      */
     public void sendCancellationNotification(String message) {
         kafkaTemplate.send("pedido-cancelado", message);
+    }
+
+    /**
+     * Envía una notificación de error al tópico "pedido-dead-letter".
+     * 
+     * @param message el mensaje a enviar que indica un error en el procesamiento de un pedido.
+     */
+    public void sendDeadLetter(String message) {
+        kafkaTemplate.send("pedido-dead-letter", message);
     }
 }
