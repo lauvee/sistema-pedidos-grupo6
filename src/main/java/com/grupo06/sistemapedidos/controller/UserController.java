@@ -2,6 +2,7 @@ package com.grupo06.sistemapedidos.controller;
 
 import com.grupo06.sistemapedidos.annotations.SwaggerApiResponses;
 import com.grupo06.sistemapedidos.dto.UsuarioDTO;
+import com.grupo06.sistemapedidos.exception.APIExceptionHandler;
 import com.grupo06.sistemapedidos.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.RequestBody; 
@@ -20,7 +21,23 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import org.springframework.web.bind.annotation.PutMapping;
 
-
+/**
+ * Controlador REST para gestionar usuarios en el sistema de pedidos.
+ * Proporciona endpoints para registrar, autenticar, obtener, actualizar y eliminar usuarios.
+ * 
+ * {@link RestController} Indica que esta clase es un controlador REST que manejará solicitudes HTTP.
+ * {@link RequestMapping} Define la ruta base para todos los endpoints de este controlador.
+ * {@link Tag} Documentación de OpenAPI para este controlador.
+ * {@link ResponseStatus} Define el código de estado HTTP para las respuestas.
+ * 
+ * Swagger:
+ * {@link SwaggerApiResponses} Anotación personalizada para definir respuestas de API.
+ * {@link Operation} Documentación de OpenAPI para cada operación del controlador.
+ * {@link PreAuthorize} Anotación para restringir el acceso a ciertos endpoints según roles.
+ * 
+ * Errores:
+ * {@link APIExceptionHandler} Manejo de excepciones personalizadas para errores de API.
+ */
 @RestController
 @RequestMapping("/api/user")
 @Tag(name = "Usuario", description = "Controlador para gestionar usuarios")
@@ -37,11 +54,10 @@ public class UserController {
      *
      * @param userDTO Datos del usuario
      * @return Respuesta con el usuario registrado
-     * @throws UserError Si ocurre un error durante el registro
      */
     @PostMapping("auth/register")
-    @Operation(summary = "Registrar un nuevo usuario", description = "Permite registrar un usuario sin necesidad de autenticación.")
     @SwaggerApiResponses
+    @Operation(summary = "Registrar un nuevo usuario", description = "Permite registrar un usuario sin necesidad de autenticación.")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UsuarioDTO> registerUser(@RequestBody UsuarioDTO userDTO) {
         System.out.println("Registering user: " + userDTO);
@@ -52,11 +68,11 @@ public class UserController {
      * Login de usuario
      * 
      * @param usuarioDTO Datos del usuario
-     * @return Respuesta con el usuario autenticado
+     * @return Respuesta con el usuario autenticado, junto con el token JWT
      */
     @PostMapping("auth/login")
-    @Operation(summary = "Login de usuario", description = "Permite el inicio de sesión de un usuario existente.")
     @SwaggerApiResponses
+    @Operation(summary = "Login de usuario", description = "Permite el inicio de sesión de un usuario existente.")
     public ResponseEntity<UsuarioDTO> userLogin(@RequestBody UsuarioDTO usuarioDTO) {
         return ResponseEntity.ok(userService.userLogin(usuarioDTO));
     }
@@ -67,9 +83,9 @@ public class UserController {
      * @return Lista de usuarios registrados
      */
     @GetMapping("/all")
-    @PreAuthorize("hasRole('ADMIN')")  // Solo accesible por usuarios con el rol ADMIN
-    @Operation(summary = "Obtener todos los usuarios", description = "Este endpoint requiere autenticación JWT.")
+    @PreAuthorize("hasRole('ADMIN')")  
     @SwaggerApiResponses
+    @Operation(summary = "Obtener todos los usuarios", description = "Este endpoint requiere autenticación JWT.")
     public ResponseEntity<List<UsuarioDTO>> getAllUsers() {
         List<UsuarioDTO> usersDTO = userService.getAllRegisteredUsers();
         return ResponseEntity.ok(usersDTO);
@@ -78,12 +94,13 @@ public class UserController {
     /**
      * Obtener todos los usuarios registrados con la id especificada
      *
-     * @return Lista de usuarios
+     * @param ids Lista de IDs de usuarios a obtener
+     * @return Lista de usuarios encontrados
      */
     @GetMapping("/all/list")
-    @PreAuthorize("hasRole('ADMIN')")  // Solo accesible por usuarios con el rol ADMIN
-    @Operation(summary = "Obtener todos los usuarios", description = "Este endpoint requiere autenticación JWT.")
+    @PreAuthorize("hasRole('ADMIN')") 
     @SwaggerApiResponses
+    @Operation(summary = "Obtener todos los usuarios", description = "Este endpoint requiere autenticación JWT.")
     public ResponseEntity<List<UsuarioDTO>> getAllUsers(@RequestParam List<Integer> ids) {
         return ResponseEntity.ok(userService.getAllUsers(ids));
     }
@@ -93,12 +110,11 @@ public class UserController {
      *
      * @param id ID del usuario
      * @return UsuarioDTO con los datos del usuario
-     * @throws UserError Si ocurre un error al obtener el usuario
      */
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')") 
-    @Operation(summary = "Obtener un usuario por ID", description = "Este endpoint requiere autenticación JWT.")
     @SwaggerApiResponses
+    @Operation(summary = "Obtener un usuario por ID", description = "Este endpoint requiere autenticación JWT.")
     public ResponseEntity<UsuarioDTO> getUserById(@PathVariable Integer id) {
         return ResponseEntity.ok(userService.getUserById(id));
     }
@@ -111,6 +127,8 @@ public class UserController {
      */
     @GetMapping("/email/{email}")
     @PreAuthorize("hasRole('ADMIN')")
+    @SwaggerApiResponses
+    @Operation(summary = "Obtener un usuario por email", description = "Este endpoint requiere autenticación JWT.")
     public UsuarioDTO getMethodName(@PathVariable String email) {
         return userService.getUserByEmail(email);
     }
@@ -118,17 +136,28 @@ public class UserController {
     /**
      * Actualizar un usuario logeado actualmente
      * 
-     * @param entity
-     * @return
+     * @param entity DTO con los datos del usuario a actualizar
+     * @return UsuarioDTO con los datos del usuario actualizado
      */
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')") 
+    @SwaggerApiResponses
+    @Operation(summary = "Actualizar un usuario por ID", description = "Este endpoint requiere autenticación JWT.")
     public UsuarioDTO putUserById(@PathVariable Integer id, @RequestBody UsuarioDTO entity) {
         return userService.putUserById(id, entity);
     }
 
+    /**
+     * Actualizar un usuario por su email
+     * 
+     * @param email Email del usuario
+     * @param entity DTO con los datos del usuario a actualizar
+     * @return UsuarioDTO con los datos del usuario actualizado
+     */
     @PutMapping("/email/{email}")
     @PreAuthorize("hasRole('ADMIN')") 
+    @SwaggerApiResponses
+    @Operation(summary = "Actualizar un usuario por email", description = "Este endpoint requiere autenticación JWT.")
     public UsuarioDTO putUserByEmail(@PathVariable String email, @RequestBody UsuarioDTO entity) {
         return userService.putUserByEmail(email, entity);
     }
@@ -137,12 +166,12 @@ public class UserController {
      * Eliminar un usuario por su ID
      *
      * @param id ID del usuario
-     * @throws UserError Si ocurre un error al eliminar el usuario
+     * @return Respuesta HTTP sin contenido
      */
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")  // Solo accesible por usuarios con el rol ADMIN
-    @Operation(summary = "Eliminar un usuario por ID", description = "Este endpoint requiere autenticación JWT.")
+    @PreAuthorize("hasRole('ADMIN')") 
     @SwaggerApiResponses
+    @Operation(summary = "Eliminar un usuario por ID", description = "Este endpoint requiere autenticación JWT.")
     @ResponseStatus(HttpStatus.NO_CONTENT) 
     public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
         userService.deleteUser(id);
@@ -152,12 +181,13 @@ public class UserController {
     /**
      * Eliminar un usuario por su email
      * 
-     * @param id ID del usuario
+     * @param email Email del usuario
+     * @return Respuesta HTTP sin contenido
      */
     @DeleteMapping("/email/{email}")
-    @PreAuthorize("hasRole('ADMIN')")  // Solo accesible por usuarios con el rol ADMIN
-    @Operation(summary = "Eliminar un usuario por su email", description = "Este endpoint requiere autenticación JWT.")
+    @PreAuthorize("hasRole('ADMIN')") 
     @SwaggerApiResponses
+    @Operation(summary = "Eliminar un usuario por su email", description = "Este endpoint requiere autenticación JWT.")
     @ResponseStatus(HttpStatus.NO_CONTENT) 
     public ResponseEntity<Void> deleteUserByEmail(@PathVariable String email) {
         userService.deleteUserByEmail(email);

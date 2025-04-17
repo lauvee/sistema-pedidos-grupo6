@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.retry.annotation.EnableRetry;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 import com.grupo06.sistemapedidos.utilities.ColorUtils;
 import java.net.Socket;
