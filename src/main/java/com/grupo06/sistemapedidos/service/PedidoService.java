@@ -102,7 +102,7 @@ public class PedidoService {
         try {
             // Añadmir un evento al topic de Kafka
             String eventMessage = "Nuevo pedido de usuario " + pedidoDTO.getUsuario() + " con productos " + pedidoDTO.getProductos();
-            kafkaProducerService.sendCreationNotification(eventMessage);
+            kafkaProducerService.sendOrderCreated(eventMessage);
 
             Usuario usuarioEntity = getUsuarioEntityByFK(pedidoDTO);
             List<Producto> listaProductos = getListProductosFK(pedidoDTO);

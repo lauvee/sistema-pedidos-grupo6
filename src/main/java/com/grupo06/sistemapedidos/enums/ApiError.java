@@ -14,6 +14,10 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum ApiError {
+	ROLE_ALREADY_EXISTS(
+		HttpStatus.CONFLICT,
+		"Role Already Exists",
+		"Role already exists in the system."),
 	ROLE_NOT_FOUND(
 		HttpStatus.NOT_FOUND,
 		"Role Not Found",

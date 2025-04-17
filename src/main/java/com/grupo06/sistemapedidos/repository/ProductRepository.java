@@ -9,7 +9,7 @@ import com.grupo06.sistemapedidos.model.Producto;
  * Interfaz que define los métodos de acceso a datos para la entidad Producto.
  * Extiende JpaRepository para proporcionar operaciones CRUD y consultas personalizadas.
  *
- * @Repository Anotación de Spring que indica que esta interfaz es un repositorio de acceso a datos.
+ * {@link Repository} Anotación de Spring que indica que esta interfaz es un repositorio de acceso a datos.
  */
 @Repository
 public interface ProductRepository extends JpaRepository<Producto, Integer> {

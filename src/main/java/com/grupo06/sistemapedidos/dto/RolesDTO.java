@@ -1,5 +1,6 @@
 package com.grupo06.sistemapedidos.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.grupo06.sistemapedidos.enums.RoleEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -34,7 +35,7 @@ public class RolesDTO {
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @Schema(description = "Lista de usuarios asociados a este rol", example = "[1, 2, 3]")
-    private List<Integer> users;
+    private List<Integer> users = new ArrayList<>();
 
     public RolesDTO(RoleEnum name, String description) {
         this.name = name;

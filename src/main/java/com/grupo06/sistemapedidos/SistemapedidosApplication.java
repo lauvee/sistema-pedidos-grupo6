@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.retry.annotation.EnableRetry;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 import com.grupo06.sistemapedidos.utilities.ColorUtils;
 import java.net.Socket;
@@ -71,7 +72,7 @@ public class SistemapedidosApplication {
         return args -> {
             try {
                 RestTemplate restTemplate = new RestTemplate();
-                String url = "http://localhost:8081"; // En la 80801 se encuentra la UI de Swagger
+                String url = "http://localhost:8081"; // En la 8080 se encuentra la UI de Swagger
                 ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
                 if (response.getStatusCode().is2xxSuccessful()) {
                     System.out.println(ColorUtils.pintarVerde("Kafka UI está funcionando correctamente"));

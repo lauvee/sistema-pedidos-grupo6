@@ -39,8 +39,8 @@ public class UserMapper {
         return new UsuarioDTO(
                 usuario.getName(),
                 usuario.getEmail(),
-                usuario.getPassword(),
                 usuario.getSignUpDate(),
+                usuario.getTotalSpend(),
                 roleEnum
         );
     }

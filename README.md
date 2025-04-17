@@ -48,7 +48,7 @@ docker-compose up -d # -d para que se ejecute en segundo plano
 # Ejecuta la aplicación
 mvn spring-boot:run
 
-# YA puedes acceder a al adocumentacion de la api con Swagger en el siguiente enlace: http://localhost:8080/swagger-ui/index.html#/ y a la base de datos en memoria H2 en http://localhost:8080/h2-console
+# Puedes acceder a al adocumentacion de la api con Swagger en el siguiente enlace: http://localhost:8080/swagger-ui/index.html#/ y a la base de datos en memoria H2 en http://localhost:8080/h2-console
 # O acceder a la interfaz de Kafka UI en http://localhost:8080/kafka-ui
 ```
 

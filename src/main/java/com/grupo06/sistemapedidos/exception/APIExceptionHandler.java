@@ -3,6 +3,7 @@ package com.grupo06.sistemapedidos.exception;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -13,6 +14,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.security.access.AccessDeniedException;
 
 /**
  * Manejador centralizado de excepciones para la API.
@@ -86,6 +88,35 @@ public class APIExceptionHandler {
 						null,
 						ZonedDateTime.now().toLocalDateTime()),
 				ApiError.ENDPOINT_NOT_FOUND.getStatus());
+	}
+
+	/**
+	 * Maneja excepciones de tipo HttpMessageNotReadableException.
+	 * Esta excepción se lanza cuando el cuerpo de la solicitud no se puede leer o analizar correctamente.
+	 * 
+	 * @param ex
+	 * @return
+	 */
+	@ExceptionHandler(HttpMessageNotReadableException.class)
+	public ResponseEntity<ExceptionDTO> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
+		String cause = ex.getMessage();
+		String sol="";
+
+		if(cause.contains("Enum"))
+			sol = "The role is not accepted for the Enum";
+		else if(cause.contains("Date"))
+			sol = "Date format is not correct, the correct format is dd/MM/yyyy";
+		 else 
+			sol = "Error in the JSON format";
+
+		ExceptionDTO apiException = new ExceptionDTO(
+			"Error en el formato del JSON",
+			sol,
+			HttpStatus.BAD_REQUEST.value(),
+			null,
+			ZonedDateTime.now().toLocalDateTime()
+		);
+		return new ResponseEntity<>(apiException, HttpStatus.BAD_REQUEST);
 	}
 
 	/**
