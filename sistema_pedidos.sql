@@ -4,7 +4,7 @@ CREATE TABLE "USUARIO" (
 	"email" varchar NOT NULL,
 	"password" varchar NOT NULL,
     "signUpDate" date NOT NULL,
-    "totalSpent" integer NOT NULL,
+    "totalSpend" integer NOT NULL,
     "roleFK" integer NOT NULL,
     PRIMARY KEY ("idUser")
 );

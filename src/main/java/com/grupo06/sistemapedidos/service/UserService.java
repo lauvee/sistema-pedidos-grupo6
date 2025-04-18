@@ -52,8 +52,8 @@ public class UserService {
             boolean isAdmin = authentication.getAuthorities().stream()
                         .anyMatch(a -> a.getAuthority().equals("ADMIN"));
 
-            // Si estamos creamo un usuario admin y el usuario que lo crea no es admin, lanzamos una excepción
-            if(userDTO.getRol() == RoleEnum.ADMIN && !isAdmin)
+            // Si estamos creando un usuario admin y el usuario que lo crea no es admin, lanzamos una excepción
+            if(userDTO.getRol() == RoleEnum.ADMIN && isAdmin)
                 throw new RequestException(ApiError.FORBIDDEN_CREATE_ADMIN);
 
             Optional<Usuario> optionalUser = userRepository.findByEmailAndName(userDTO.getEmail(), userDTO.getName());

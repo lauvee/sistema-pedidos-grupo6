@@ -91,7 +91,7 @@ public class PedidoController {
      */
     @PostMapping()
     @SwaggerApiResponses
-    @Operation(summary = "Crear un nuevo pedido", description = "Crea un nuevo pedido basado en el DTO proporcionado, los suuarios y los productos a los que hacen referencia deven de existir previamente.")
+    @Operation(summary = "Crear un nuevo pedido", description = "Crea un nuevo pedido basado en el DTO proporcionado, los usuarios y los productos a los que hacen referencia deben de existir previamente.")
     @ResponseStatus(HttpStatus.CREATED)
     public PedidoDTO postPedido(@RequestBody PedidoDTO pedidoDTO) {
         return pedidoService.postPedido(pedidoDTO);

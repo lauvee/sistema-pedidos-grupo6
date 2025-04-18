@@ -1,0 +1,1358 @@
+{
+	"info": {
+		"_postman_id": "1b97897e-6b62-4722-858b-cbc257be1edd",
+		"name": "sistemas_pedidos",
+		"description": "# 🚀 Get started here\n\nThis template guides you through CRUD operations (GET, POST, PUT, DELETE), variables, and tests.\n\n## 🔖 **How to use this template**\n\n#### **Step 1: Send requests**\n\nRESTful APIs allow you to perform CRUD operations using the POST, GET, PUT, and DELETE HTTP methods.\n\nThis collection contains each of these [request](https://learning.postman.com/docs/sending-requests/requests/) types. Open each request and click \"Send\" to see what happens.\n\n#### **Step 2: View responses**\n\nObserve the response tab for status code (200 OK), response time, and size.\n\n#### **Step 3: Send new Body data**\n\nUpdate or add new data in \"Body\" in the POST request. Typically, Body data is also used in PUT request.\n\n```\n{\n    \"name\": \"Add your name in the body\"\n}\n\n ```\n\n#### **Step 4: Update the variable**\n\nVariables enable you to store and reuse values in Postman. We have created a [variable](https://learning.postman.com/docs/sending-requests/variables/) called `base_url` with the sample request [https://postman-api-learner.glitch.me](https://postman-api-learner.glitch.me). Replace it with your API endpoint to customize this collection.\n\n#### **Step 5: Add tests in the \"Scripts\" tab**\n\nAdding tests to your requests can help you confirm that your API is working as expected. You can write test scripts in JavaScript and view the output in the \"Test Results\" tab.\n\n<img src=\"https://content.pstmn.io/fa30ea0a-373d-4545-a668-e7b283cca343/aW1hZ2UucG5n\" alt=\"\" height=\"1530\" width=\"2162\">\n\n## 💪 Pro tips\n\n- Use folders to group related requests and organize the collection.\n    \n- Add more [scripts](https://learning.postman.com/docs/writing-scripts/intro-to-scripts/) to verify if the API works as expected and execute workflows.\n    \n\n## 💡Related templates\n\n[API testing basics](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9a37a28-055b-49cd-8c7e-97494a21eb54&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[API documentation](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9c28f47-1253-44af-a2f3-20dce4da1f18&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[Authorization methods](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=31a9a6ed-4cdf-4ced-984c-d12c9aec1c27&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "41327597"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "all_users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_sistemas_pedidos}}/api/user/all",
+							"host": [
+								"{{base_url_sistemas_pedidos}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "all_users_by_ids",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBwZWRpZG9zLmNvbSIsInJvbGUiOiJHVUVTVCIsImlhdCI6MTc0NDkxNzEyMywiZXhwIjoxNzQ1MDAzNTIzfQ.qb3XRdm8ezASOK2KdXCXivFhfVe0w2_skLRs_Pg9k4YeO5cfC75DNZQhMj04r5rDpDi9MsRicmNVGrg2aEgYUg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_sistemas_pedidos}}/api/user/all/list?ids=2",
+							"host": [
+								"{{base_url_sistemas_pedidos}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"all",
+								"list"
+							],
+							"query": [
+								{
+									"key": "ids",
+									"value": "3",
+									"disabled": true
+								},
+								{
+									"key": "ids",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "ids",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "ids",
+									"value": "4",
+									"disabled": true
+								},
+								{
+									"key": "ids",
+									"value": "10",
+									"disabled": true
+								},
+								{
+									"key": "ids",
+									"value": "5",
+									"disabled": true
+								},
+								{
+									"key": "ids",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "use_by_id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBwZWRpZG9zLmNvbSIsInJvbGUiOiJHVUVTVCIsImlhdCI6MTc0NDkxNzEyMywiZXhwIjoxNzQ1MDAzNTIzfQ.qb3XRdm8ezASOK2KdXCXivFhfVe0w2_skLRs_Pg9k4YeO5cfC75DNZQhMj04r5rDpDi9MsRicmNVGrg2aEgYUg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_sistemas_pedidos}}/api/user/2",
+							"host": [
+								"{{base_url_sistemas_pedidos}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "use_by_email",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBwZWRpZG9zLmNvbSIsInJvbGUiOiJHVUVTVCIsImlhdCI6MTc0NDkxNzEyMywiZXhwIjoxNzQ1MDAzNTIzfQ.qb3XRdm8ezASOK2KdXCXivFhfVe0w2_skLRs_Pg9k4YeO5cfC75DNZQhMj04r5rDpDi9MsRicmNVGrg2aEgYUg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_sistemas_pedidos}}/api/user/email/carlos@gmail.com",
+							"host": [
+								"{{base_url_sistemas_pedidos}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"email",
+								"carlos@gmail.com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBwZWRpZG9zLmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc0NDk5OTY0MSwiZXhwIjoxNzQ1MDg2MDQxfQ.AJzCNkcPEtVbKVTToDd4KUk8a0LNZYJqwfbXsQ5-02F4Dqso_aeiktiMHIloCVgQnSzj4pxeMhoJqB8vREfVeA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"BytesColaborativos\", \r\n  \"email\": \"BytesColaborativos@gmail.com\",\r\n  \"password\": \"BytesColaborativos\",\r\n  \"signUpDate\": \"01/04/2025\",\r\n  \"totalSpent\": 0,\r\n  \"rol\": \"ADMIN\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_sistemas_pedidos}}/api/user/auth/register",
+							"host": [
+								"{{base_url_sistemas_pedidos}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"auth",
+								"register"
+							]
+						},
+						"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"carlos\",\r\n  \"email\": \"carlos@gmail.com\",\r\n  \"password\": \"carlos\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_sistemas_pedidos}}/api/user/auth/login",
+							"host": [
+								"{{base_url_sistemas_pedidos}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"auth",
+								"login"
+							]
+						},
+						"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+					},
+					"response": []
+				},
+				{
+					"name": "update_user_by_id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBwZWRpZG9zLmNvbSIsInJvbGUiOiJHVUVTVCIsImlhdCI6MTc0NDkyMTI2NSwiZXhwIjoxNzQ1MDA3NjY1fQ.o2cGvuNNRvJ_AJAwnYoIVTmUjO9-LupMNgrvCmUtHSXV-3S24wBs0rUEZU4EU4BNu2auobAIt94a2KdAVXIwxg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"admin\",\r\n  \"email\": \"admin@pedidos.com\",\r\n  \"password\": \"admin123\",\r\n  \"signUpDate\": \"01/04/2025\",\r\n  \"totalSpend\": 0,\r\n  \"rol\": \"ADMIN\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_sistemas_pedidos}}/api/user/1",
+							"host": [
+								"{{base_url_sistemas_pedidos}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_user_by_name",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBwZWRpZG9zLmNvbSIsInJvbGUiOiJHVUVTVCIsImlhdCI6MTc0NDkyMTI2NSwiZXhwIjoxNzQ1MDA3NjY1fQ.o2cGvuNNRvJ_AJAwnYoIVTmUjO9-LupMNgrvCmUtHSXV-3S24wBs0rUEZU4EU4BNu2auobAIt94a2KdAVXIwxg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"admin\",\r\n  \"email\": \"admin@pedidos.com\",\r\n  \"password\": \"admin123\",\r\n  \"signUpDate\": \"01/04/2025\",\r\n  \"totalSpend\": 0,\r\n  \"rol\": \"ADMIN\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_sistemas_pedidos}}/api/user/name/admin",
+							"host": [
+								"{{base_url_sistemas_pedidos}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"name",
+								"admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "del_user_by_id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBwZWRpZG9zLmNvbSIsInJvbGUiOiJHVUVTVCIsImlhdCI6MTc0NDkyMDM4MSwiZXhwIjoxNzQ1MDA2NzgxfQ.DLy2-7Yh-n5mq_HO1JVQfinfqZUoKfL3RijLzAy5Qfv833bgpu5DqyW6tsmqiuP5Ix_2lDbey5kvyTaADZrzSA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_sistemas_pedidos}}/api/user/2",
+							"host": [
+								"{{base_url_sistemas_pedidos}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "del_user_by_email",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBwZWRpZG9zLmNvbSIsInJvbGUiOiJHVUVTVCIsImlhdCI6MTc0NDkyMDM4MSwiZXhwIjoxNzQ1MDA2NzgxfQ.DLy2-7Yh-n5mq_HO1JVQfinfqZUoKfL3RijLzAy5Qfv833bgpu5DqyW6tsmqiuP5Ix_2lDbey5kvyTaADZrzSA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_sistemas_pedidos}}/api/user/email/sasdfdaf@gmail.com",
+							"host": [
+								"{{base_url_sistemas_pedidos}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"email",
+								"sasdfdaf@gmail.com"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "roles",
+			"item": [
+				{
+					"name": "get_all_roles",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var template = `\r",
+									"<style type=\"text/css\">\r",
+									"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}\r",
+									"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}\r",
+									"    .tftable tr {background-color:#ffffff;}\r",
+									"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}\r",
+									"    .tftable tr:hover {background-color:#e0ffff;}\r",
+									"</style>\r",
+									"\r",
+									"<table class=\"tftable\" border=\"1\">\r",
+									"    <tr>\r",
+									"        <th>Error</th>\r",
+									"        <th>Description</th>\r",
+									"        <th>Code</th>\r",
+									"    </tr>\r",
+									"    <tr>\r",
+									"        <td>{{response.hasError}}</td>\r",
+									"        <td>{{response.description}}</td>\r",
+									"        <td>{{response.code}}</td>\r",
+									"    </tr>\r",
+									"</table>\r",
+									"`;\r",
+									"\r",
+									"function constructVisualizerPayload() {\r",
+									"    return {response: pm.response.json()}\r",
+									"}\r",
+									"\r",
+									"pm.visualizer.set(template, constructVisualizerPayload());"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBwZWRpZG9zLmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc0NDg4NDI2MCwiZXhwIjoxNzQ0OTcwNjYwfQ.gbhPqvZq85tC-fT9HY3NZHGOUBZIdYvGVRj0OGCT1bIIGDvomYPFM7s4mpUn3u6BSZn4eFiGikGHTN65DHAN-A\"",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_sistemas_pedidos}}/api/role/all",
+							"host": [
+								"{{base_url_sistemas_pedidos}}"
+							],
+							"path": [
+								"api",
+								"role",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_role_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var template = `\r",
+									"<style type=\"text/css\">\r",
+									"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}\r",
+									"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}\r",
+									"    .tftable tr {background-color:#ffffff;}\r",
+									"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}\r",
+									"    .tftable tr:hover {background-color:#e0ffff;}\r",
+									"</style>\r",
+									"\r",
+									"<table class=\"tftable\" border=\"1\">\r",
+									"    <tr>\r",
+									"        <th>Error</th>\r",
+									"        <th>Description</th>\r",
+									"        <th>Code</th>\r",
+									"    </tr>\r",
+									"    <tr>\r",
+									"        <td>{{response.hasError}}</td>\r",
+									"        <td>{{response.description}}</td>\r",
+									"        <td>{{response.code}}</td>\r",
+									"    </tr>\r",
+									"</table>\r",
+									"`;\r",
+									"\r",
+									"function constructVisualizerPayload() {\r",
+									"    return {response: pm.response.json()}\r",
+									"}\r",
+									"\r",
+									"pm.visualizer.set(template, constructVisualizerPayload());"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBwZWRpZG9zLmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc0NDk5OTY0MSwiZXhwIjoxNzQ1MDg2MDQxfQ.AJzCNkcPEtVbKVTToDd4KUk8a0LNZYJqwfbXsQ5-02F4Dqso_aeiktiMHIloCVgQnSzj4pxeMhoJqB8vREfVeA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_sistemas_pedidos}}/api/role/1",
+							"host": [
+								"{{base_url_sistemas_pedidos}}"
+							],
+							"path": [
+								"api",
+								"role",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_role_name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var template = `\r",
+									"<style type=\"text/css\">\r",
+									"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}\r",
+									"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}\r",
+									"    .tftable tr {background-color:#ffffff;}\r",
+									"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}\r",
+									"    .tftable tr:hover {background-color:#e0ffff;}\r",
+									"</style>\r",
+									"\r",
+									"<table class=\"tftable\" border=\"1\">\r",
+									"    <tr>\r",
+									"        <th>Error</th>\r",
+									"        <th>Description</th>\r",
+									"        <th>Code</th>\r",
+									"    </tr>\r",
+									"    <tr>\r",
+									"        <td>{{response.hasError}}</td>\r",
+									"        <td>{{response.description}}</td>\r",
+									"        <td>{{response.code}}</td>\r",
+									"    </tr>\r",
+									"</table>\r",
+									"`;\r",
+									"\r",
+									"function constructVisualizerPayload() {\r",
+									"    return {response: pm.response.json()}\r",
+									"}\r",
+									"\r",
+									"pm.visualizer.set(template, constructVisualizerPayload());"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBwZWRpZG9zLmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc0NDk5OTY0MSwiZXhwIjoxNzQ1MDg2MDQxfQ.AJzCNkcPEtVbKVTToDd4KUk8a0LNZYJqwfbXsQ5-02F4Dqso_aeiktiMHIloCVgQnSzj4pxeMhoJqB8vREfVeA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_sistemas_pedidos}}/api/role/name/ADMIN",
+							"host": [
+								"{{base_url_sistemas_pedidos}}"
+							],
+							"path": [
+								"api",
+								"role",
+								"name",
+								"ADMIN"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "role",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBwZWRpZG9zLmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc0NDk5NTA1MSwiZXhwIjoxNzQ1MDgxNDUxfQ.bBbCAo-ifwdUYHh_7eZJe8_Xf4NvZGO4uM-Q5ArMUdaQ5wZYtPbWV_ocJSGwJCE7trb0RgD1cEzXCXd8C7eRWQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"ADMIN\",\r\n  \"description\": \"administrador\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_sistemas_pedidos}}/api/role",
+							"host": [
+								"{{base_url_sistemas_pedidos}}"
+							],
+							"path": [
+								"api",
+								"role"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "\"Carlos\"",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "\"carlosvassan@gmail.com\"",
+									"disabled": true
+								},
+								{
+									"key": "signUpDate",
+									"value": "2025-04-11",
+									"disabled": true
+								},
+								{
+									"key": "password",
+									"value": "\"tijuana20\"",
+									"disabled": true
+								},
+								{
+									"key": "totalSpend",
+									"value": "0",
+									"disabled": true
+								},
+								{
+									"key": "rol",
+									"value": "ADMIN",
+									"disabled": true
+								}
+							]
+						},
+						"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+					},
+					"response": []
+				},
+				{
+					"name": "update_by_id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBwZWRpZG9zLmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc0NDk5OTY0MSwiZXhwIjoxNzQ1MDg2MDQxfQ.AJzCNkcPEtVbKVTToDd4KUk8a0LNZYJqwfbXsQ5-02F4Dqso_aeiktiMHIloCVgQnSzj4pxeMhoJqB8vREfVeA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"GUEST\",\r\n  \"description\": \"El rol de invitado\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_sistemas_pedidos}}/api/role/1",
+							"host": [
+								"{{base_url_sistemas_pedidos}}"
+							],
+							"path": [
+								"api",
+								"role",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_by_name",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBwZWRpZG9zLmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc0NDkxNjg2OCwiZXhwIjoxNzQ1MDAzMjY4fQ.0WyAF1yKYIhqsX9VWNpEBVhRytJLaido8KzoTXk2ncq8loDX4T3qEk1hRyhjEJiaD3Tr_kdoiN_EuodCPT3sIg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"GUEST\",\r\n  \"description\": \"El rol\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_sistemas_pedidos}}/api/role/name/guest",
+							"host": [
+								"{{base_url_sistemas_pedidos}}"
+							],
+							"path": [
+								"api",
+								"role",
+								"name",
+								"guest"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete_role_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBwZWRpZG9zLmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc0NDg4Njg1MSwiZXhwIjoxNzQ0OTczMjUxfQ.4Ox6Gk3cBpqQxOGsfHpwZSpYuzj3atrXmHdv3tEOHmQNO1l5waLBEYJHEUcwgWGozdCSJjlUSMkNo3qKrufIfQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"\",\r\n  \"description\": \"\",\r\n  \"users\":\"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_sistemas_pedidos}}/api/role/12",
+							"host": [
+								"{{base_url_sistemas_pedidos}}"
+							],
+							"path": [
+								"api",
+								"role",
+								"12"
+							]
+						},
+						"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+					},
+					"response": []
+				},
+				{
+					"name": "delete_role_name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBwZWRpZG9zLmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc0NDg4Njg1MSwiZXhwIjoxNzQ0OTczMjUxfQ.4Ox6Gk3cBpqQxOGsfHpwZSpYuzj3atrXmHdv3tEOHmQNO1l5waLBEYJHEUcwgWGozdCSJjlUSMkNo3qKrufIfQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"\",\r\n  \"description\": \"\",\r\n  \"users\":\"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_sistemas_pedidos}}/api/role/name/admin",
+							"host": [
+								"{{base_url_sistemas_pedidos}}"
+							],
+							"path": [
+								"api",
+								"role",
+								"name",
+								"admin"
+							]
+						},
+						"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "productos",
+			"item": [
+				{
+					"name": "producto_by_id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBwZWRpZG9zLmNvbSIsInJvbGUiOiJHVUVTVCIsImlhdCI6MTc0NDkyNzY1MiwiZXhwIjoxNzQ1MDE0MDUyfQ.NXpSTnv4w57GMtqugZ9RrEkCF76Gmu0Z35RCeFhQ3Y91QNqeZXAm7ohppSvT4PKNbHtAsTVbBe7qAqOuofPYEQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_sistemas_pedidos}}/api/producto/2",
+							"host": [
+								"{{base_url_sistemas_pedidos}}"
+							],
+							"path": [
+								"api",
+								"producto",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "producto_all",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBwZWRpZG9zLmNvbSIsInJvbGUiOiJHVUVTVCIsImlhdCI6MTc0NDkyNTY0NiwiZXhwIjoxNzQ1MDEyMDQ2fQ.Smt0evMyThhWck2bfrLiFLMsWou6STfVmm9LJb2VwNCv4twa9L4WAD2jVNrOb8BNRUgjWMlSk3Z7gqgANtB0Eg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_sistemas_pedidos}}/api/producto/all",
+							"host": [
+								"{{base_url_sistemas_pedidos}}"
+							],
+							"path": [
+								"api",
+								"producto",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_producto",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBwZWRpZG9zLmNvbSIsInJvbGUiOiJHVUVTVCIsImlhdCI6MTc0NDkyNzY1MiwiZXhwIjoxNzQ1MDE0MDUyfQ.NXpSTnv4w57GMtqugZ9RrEkCF76Gmu0Z35RCeFhQ3Y91QNqeZXAm7ohppSvT4PKNbHtAsTVbBe7qAqOuofPYEQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Coca Cola\",\r\n    \"stock\": 0,\r\n    \"price\": 100,\r\n    \"description\": \"Bebida mortal \"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_sistemas_pedidos}}/api/producto",
+							"host": [
+								"{{base_url_sistemas_pedidos}}"
+							],
+							"path": [
+								"api",
+								"producto"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_producto_by_id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBwZWRpZG9zLmNvbSIsInJvbGUiOiJHVUVTVCIsImlhdCI6MTc0NDkyNzY1MiwiZXhwIjoxNzQ1MDE0MDUyfQ.NXpSTnv4w57GMtqugZ9RrEkCF76Gmu0Z35RCeFhQ3Y91QNqeZXAm7ohppSvT4PKNbHtAsTVbBe7qAqOuofPYEQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Cacaooo\",\r\n    \"stock\": 0,\r\n    \"price\": 100,\r\n    \"description\": \"Arroz largo del mercadona\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_sistemas_pedidos}}/api/producto/2",
+							"host": [
+								"{{base_url_sistemas_pedidos}}"
+							],
+							"path": [
+								"api",
+								"producto",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_producto_by_name",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBwZWRpZG9zLmNvbSIsInJvbGUiOiJHVUVTVCIsImlhdCI6MTc0NDkyNzY1MiwiZXhwIjoxNzQ1MDE0MDUyfQ.NXpSTnv4w57GMtqugZ9RrEkCF76Gmu0Z35RCeFhQ3Y91QNqeZXAm7ohppSvT4PKNbHtAsTVbBe7qAqOuofPYEQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Cacao\",\r\n    \"stock\": 0,\r\n    \"price\": 100,\r\n    \"description\": \"Arroz largo del mercadona\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_sistemas_pedidos}}/api/producto/name/cocacola-roja",
+							"host": [
+								"{{base_url_sistemas_pedidos}}"
+							],
+							"path": [
+								"api",
+								"producto",
+								"name",
+								"cocacola-roja"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delate_producto_by_id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBwZWRpZG9zLmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc0NDk5OTY0MSwiZXhwIjoxNzQ1MDg2MDQxfQ.AJzCNkcPEtVbKVTToDd4KUk8a0LNZYJqwfbXsQ5-02F4Dqso_aeiktiMHIloCVgQnSzj4pxeMhoJqB8vREfVeA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_sistemas_pedidos}}/api/producto/del/2",
+							"host": [
+								"{{base_url_sistemas_pedidos}}"
+							],
+							"path": [
+								"api",
+								"producto",
+								"del",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delate_producto_by_name",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBwZWRpZG9zLmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc0NDk5OTY0MSwiZXhwIjoxNzQ1MDg2MDQxfQ.AJzCNkcPEtVbKVTToDd4KUk8a0LNZYJqwfbXsQ5-02F4Dqso_aeiktiMHIloCVgQnSzj4pxeMhoJqB8vREfVeA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_sistemas_pedidos}}/api/producto/del/name/cacao",
+							"host": [
+								"{{base_url_sistemas_pedidos}}"
+							],
+							"path": [
+								"api",
+								"producto",
+								"del",
+								"name",
+								"cacao"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "pedidos",
+			"item": [
+				{
+					"name": "pedido_by_id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBwZWRpZG9zLmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc0NDk5OTY0MSwiZXhwIjoxNzQ1MDg2MDQxfQ.AJzCNkcPEtVbKVTToDd4KUk8a0LNZYJqwfbXsQ5-02F4Dqso_aeiktiMHIloCVgQnSzj4pxeMhoJqB8vREfVeA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_sistemas_pedidos}}/api/pedido/1",
+							"host": [
+								"{{base_url_sistemas_pedidos}}"
+							],
+							"path": [
+								"api",
+								"pedido",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pedido_all",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBwZWRpZG9zLmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc0NDk5OTY0MSwiZXhwIjoxNzQ1MDg2MDQxfQ.AJzCNkcPEtVbKVTToDd4KUk8a0LNZYJqwfbXsQ5-02F4Dqso_aeiktiMHIloCVgQnSzj4pxeMhoJqB8vREfVeA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_sistemas_pedidos}}/api/pedido/all",
+							"host": [
+								"{{base_url_sistemas_pedidos}}"
+							],
+							"path": [
+								"api",
+								"pedido",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_pedido",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBwZWRpZG9zLmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc0NDk5OTY0MSwiZXhwIjoxNzQ1MDg2MDQxfQ.AJzCNkcPEtVbKVTToDd4KUk8a0LNZYJqwfbXsQ5-02F4Dqso_aeiktiMHIloCVgQnSzj4pxeMhoJqB8vREfVeA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"usuario\": 1,   \r\n  \"productos\": [1]  \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_sistemas_pedidos}}/api/pedido",
+							"host": [
+								"{{base_url_sistemas_pedidos}}"
+							],
+							"path": [
+								"api",
+								"pedido"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_pedido_by_id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBwZWRpZG9zLmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc0NDk5OTY0MSwiZXhwIjoxNzQ1MDg2MDQxfQ.AJzCNkcPEtVbKVTToDd4KUk8a0LNZYJqwfbXsQ5-02F4Dqso_aeiktiMHIloCVgQnSzj4pxeMhoJqB8vREfVeA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"usuario\": 1,   \r\n  \"productos\": [1, 1, 1]  \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_sistemas_pedidos}}/api/pedido/1",
+							"host": [
+								"{{base_url_sistemas_pedidos}}"
+							],
+							"path": [
+								"api",
+								"pedido",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete_producto_by_id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBwZWRpZG9zLmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc0NDk5OTY0MSwiZXhwIjoxNzQ1MDg2MDQxfQ.AJzCNkcPEtVbKVTToDd4KUk8a0LNZYJqwfbXsQ5-02F4Dqso_aeiktiMHIloCVgQnSzj4pxeMhoJqB8vREfVeA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_sistemas_pedidos}}/api/pedido/del/1",
+							"host": [
+								"{{base_url_sistemas_pedidos}}"
+							],
+							"path": [
+								"api",
+								"pedido",
+								"del",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "id",
+			"value": "1"
+		},
+		{
+			"key": "base_url",
+			"value": "https://postman-rest-api-learner.glitch.me/"
+		}
+	]
+}

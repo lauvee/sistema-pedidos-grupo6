@@ -54,7 +54,7 @@ public class RoleController {
      */
     @PostMapping()
     @SwaggerApiResponses
-    @Operation(summary = "Crear un nuevo rol", description = "Crea un nuevo rol en el sistema. Los roles deben ser únicos y de tipo RoleEnum, de momentos estan disponibles para crear ADMIN, USER, GUEST.")
+    @Operation(summary = "Crear un nuevo rol", description = "Crea un nuevo rol en el sistema. Los roles deben ser únicos y de tipo RoleEnum, de momento estan disponibles para crear: ADMIN, USER, GUEST.")
     @ResponseStatus(HttpStatus.CREATED)
     public RolesDTO postRole(@RequestBody RolesDTO rol) {
         return roleService.createRole(rol);

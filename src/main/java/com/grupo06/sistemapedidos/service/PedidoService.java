@@ -114,7 +114,7 @@ public class PedidoService {
                 throw new RequestException(ApiError.USER_ALREADY_HAS_ORDER);
 
             // Añadmir un evento al topic de Kafka
-            kafkaProducerService.sendOrderCreated("Nuevo pedido de usuario " + pedidoDTO.getUsuario() + " con productos " + pedidoDTO.getProductos());
+          //2 kafkaProducerService.sendOrderCreated("Nuevo pedido de usuario " + pedidoDTO.getUsuario() + " con productos " + pedidoDTO.getProductos());
 
             // Obtenemos el usuario de la fk
             Usuario usuarioEntity = getUsuarioEntityByFK(pedidoDTO);
@@ -142,7 +142,7 @@ public class PedidoService {
     public PedidoDTO putPedidoById(PedidoDTO pedidoDTO) {
         try {
             String eventMessage = "Pedido modificado de usuario " + pedidoDTO.getUsuario() + " con productos " + pedidoDTO.getProductos();
-            kafkaProducerService.sendModificationNotification(eventMessage);
+          //2323  kafkaProducerService.sendModificationNotification(eventMessage);
 
             Usuario usuarioEntity = getUsuarioEntityByFK(pedidoDTO);
             List<Producto> listaProductos = getListProductosFK(pedidoDTO);
@@ -163,7 +163,7 @@ public class PedidoService {
     public void deletePedidoById(Integer id){
         try {
             String eventMessage = "Pedido eliminado con id " + id;
-            kafkaProducerService.sendCancellationNotification(eventMessage);
+           //123 kafkaProducerService.sendCancellationNotification(eventMessage);
             // Eliminar el pedido de la base de datos
             pedidoRepository.deleteById(id);
         } catch (Exception e) {
