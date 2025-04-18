@@ -2,7 +2,12 @@ package com.grupo06.sistemapedidos.repository;
 
 import com.grupo06.sistemapedidos.enums.RoleEnum;
 import com.grupo06.sistemapedidos.model.Roles;
+
+import jakarta.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -12,7 +17,7 @@ import java.util.Optional;
  * Este repositorio permite realizar operaciones de persistencia en la base de datos relacionadas con los roles de usuario.
  * Extiende JpaRepository, que proporciona métodos CRUD y más para interactuar con la base de datos.
  *
- * @Repository Anotación de Spring que indica que esta interfaz es un repositorio de acceso a datos.
+ * {@link Repository} Anotación de Spring que indica que esta interfaz es un repositorio de acceso a datos.
  */
 @Repository
 public interface RoleRepository extends JpaRepository<Roles, Integer> {
@@ -26,4 +31,13 @@ public interface RoleRepository extends JpaRepository<Roles, Integer> {
      * @return Un objeto Optional que contiene el rol encontrado, o vacío si no se encuentra.
      */
     Optional<Roles> findByName(RoleEnum name);
+
+    /**
+     * Método para eliminar un rol por su nombre.
+     *
+     * Este método elimina un rol basado en el nombre del rol definido en el enum 'RoleEnum'.
+     *
+     * @param name El nombre del rol, representado como un valor del enumerado 'RoleEnum'.
+     */
+    void deleteByName(RoleEnum name);
 }

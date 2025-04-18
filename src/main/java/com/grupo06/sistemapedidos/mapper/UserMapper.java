@@ -1,11 +1,16 @@
 package com.grupo06.sistemapedidos.mapper;
 
 import com.grupo06.sistemapedidos.repository.RoleRepository;
+
+import java.util.Optional;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import com.grupo06.sistemapedidos.dto.UsuarioDTO;
 import com.grupo06.sistemapedidos.model.Usuario;
+import com.grupo06.sistemapedidos.enums.ApiError;
 import com.grupo06.sistemapedidos.enums.RoleEnum;
+import com.grupo06.sistemapedidos.exception.RequestException;
 import com.grupo06.sistemapedidos.model.Roles;
 
 /**
@@ -34,8 +39,8 @@ public class UserMapper {
         return new UsuarioDTO(
                 usuario.getName(),
                 usuario.getEmail(),
-                usuario.getPassword(),
                 usuario.getSignUpDate(),
+                usuario.getTotalSpend(),
                 roleEnum
         );
     }
@@ -62,10 +67,13 @@ public class UserMapper {
 
         // Buscar el rol en la base de datos
         RoleEnum roleEnum = RoleEnum.valueOf(usuarioDTO.getRol().toString());
-        Roles roleEntity = roleRepository.findByName(roleEnum)
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado: " + roleEnum));
+        Optional<Roles> roleEntity = roleRepository.findByName(roleEnum);
 
-        usuario.setRole(roleEntity);
+        if(!roleEntity.isPresent()){
+            throw new RequestException(ApiError.ROLE_NOT_FOUND);
+        }
+
+        usuario.setRole(roleEntity.get());
 
         return usuario;
     }

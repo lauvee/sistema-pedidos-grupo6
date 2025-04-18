@@ -4,7 +4,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.grupo06.sistemapedidos.enums.RoleEnum;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -32,7 +35,7 @@ public class JwtTokenService {
      * @param role El rol del usuario, que será guardado como un claim adicional en el token.
      * @return El token JWT generado.
      */
-    public String generateTokenWithRole(String email, String role) {
+    public String generateTokenWithRole(String email, RoleEnum role) {
         SecretKey secretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes());
 
         // Construir el token JWT con los parámetros correspondientes:
@@ -43,5 +46,30 @@ public class JwtTokenService {
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(secretKey, SignatureAlgorithm.HS512)
                 .compact();
+    }
+
+    /**
+     * Codifica una contraseña utilizando BCryptPasswordEncoder.
+     * 
+     * BCrypt es un algoritmo de hash unidireccional, por lo que no es posible "decodificar" lo generado.
+     *
+     * @param rawPassword la contraseña en texto plano.
+     * @return la contraseña codificada.
+     */
+    public String encodePassword(String rawPassword) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder.encode(rawPassword);
+    }
+    
+    /**
+     * Verifica si la contraseña en texto plano coincide con la contraseña codificada utilizando BCrypt.
+     *
+     * @param rawPassword la contraseña en texto plano.
+     * @param encodedPassword la contraseña codificada.
+     * @return true si la contraseña coincide, false de lo contrario.
+     */
+    public boolean matchesPassword(String rawPassword, String encodedPassword) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        return encoder.matches(rawPassword, encodedPassword);
     }
 }

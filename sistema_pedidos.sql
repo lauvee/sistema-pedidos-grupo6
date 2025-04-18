@@ -25,20 +25,30 @@ CREATE TABLE "PEDIDO" (
     PRIMARY KEY ("idPedido")
 );
 
-CREATE TYPE role_enum AS ENUM ('ADMIN', 'USER', 'GUEST');
-
 CREATE TABLE "ROLES" (
     "idRol" integer NOT NULL,
-    "name" role_enum NOT NULL,
+    "name" varchar(10) NOT NULL CHECK ("name" IN ('ADMIN', 'USER', 'GUEST')),
     "description" varchar NOT NULL,
     PRIMARY KEY ("idRol")
 );
 
+CREATE TABLE "PEDIDO_EVENTO" (
+    "idEvento" integer NOT NULL,
+    "topic" varchar NOT NULL,
+    "description" varchar NOT NULL,
+    "date" date NOT NULL,
+    PRIMARY KEY ("idEvento")
+);
+
 ALTER TABLE "USUARIO"
-ADD CONSTRAINT "fk_Usuario_roleFK_Roles_idRol" FOREIGN KEY("roleFK") REFERENCES "ROLES"("idRol");
+ADD CONSTRAINT "fk_Usuario_roleFK_Roles_idRol"
+FOREIGN KEY("roleFK") REFERENCES "ROLES"("idRol")
+ON DELETE CASCADE;
 
 ALTER TABLE "PEDIDO"
-ADD CONSTRAINT "fk_Pedido_usuarioFK_Usuario_idUser" FOREIGN KEY("usuarioFK") REFERENCES "USUARIO"("idUser");
+ADD CONSTRAINT "fk_Pedido_usuarioFK_Usuario_idUser"
+FOREIGN KEY("usuarioFK") REFERENCES "USUARIO"("idUser");
 
 ALTER TABLE "PEDIDO"
-ADD CONSTRAINT "fk_Pedido_pedidoFK_Producto_idProducto" FOREIGN KEY("pedidoFK") REFERENCES "PRODUCTO"("idProducto");
+ADD CONSTRAINT "fk_Pedido_pedidoFK_Producto_idProducto"
+FOREIGN KEY("pedidoFK") REFERENCES "PRODUCTO"("idProducto");

@@ -2,13 +2,25 @@ package com.grupo06.sistemapedidos.model;
 
 
 import java.util.List;
-
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+/**
+ * Clase que representa un producto en el sistema en la base de datos, osea la entidad.
+ * Un producto tiene un nombre, stock, precio y descripción.
+ * Esta clase es parte del modelo de datos y se utiliza para mapear la tabla "PRODUCTO" en la base de datos.
+ * Contiene anotaciones de JPA para la persistencia y validaciones de datos.
+ * 
+ * @Hidden es una anotación de Swagger que oculta la clase de la documentación
+ * @Entity indica que esta clase es una entidad JPA
+ * @Table especifica el nombre de la tabla en la base de datos
+ * @Data es una anotación de Lombok que genera automáticamente
+ */
+@Hidden
 @Entity
 @Table(name = "PRODUCTO", schema = "public")
 @Data
