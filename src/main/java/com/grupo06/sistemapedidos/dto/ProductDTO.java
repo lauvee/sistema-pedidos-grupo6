@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -13,6 +14,7 @@ import lombok.Data;
  * Se utilizan anotaciones de validación para asegurar que los datos sean correctos antes de ser procesados.
  */
 @Data
+@AllArgsConstructor
 @Schema(description = "DTO para representar un producto")
 public class ProductDTO {
     // Nombre del producto, no puede ser nulo ni estar vacío

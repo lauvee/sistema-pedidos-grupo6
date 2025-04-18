@@ -1,6 +1,7 @@
 package com.grupo06.sistemapedidos.enums;
 
 import org.springframework.http.HttpStatus;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -14,6 +15,26 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum ApiError {
+	USER_ALREADY_HAS_ORDER(
+		HttpStatus.CONFLICT,
+		"User Already Has Order",
+		"User already has an order in the system, try with other user."),
+	PEDIDO_NOT_FOUND(
+		HttpStatus.NOT_FOUND,
+		"Pedido Not Found",
+		"Pedido not found in the system."),
+	PEDIDO_ALREADY_EXISTS(
+		HttpStatus.CONFLICT,
+		"Pedido Already Exists",
+		"Pedido already exists in the system."),
+	PRODUCT_NOT_FOUND(
+		HttpStatus.NOT_FOUND,
+		"Product Not Found",
+		"Product not found in the system."),
+	PRODUCT_ALREADY_EXISTS(
+		HttpStatus.CONFLICT,
+		"Product Already Exists",
+		"Product already exists in the system."),
 	ROLE_ALREADY_EXISTS(
 		HttpStatus.CONFLICT,
 		"Role Already Exists",
@@ -46,6 +67,10 @@ public enum ApiError {
 			HttpStatus.FORBIDDEN,
 			"Forbidden Action",
 			"Insufficient permissions for the requested operation."),
+	FORBIDDEN_CREATE_ADMIN(
+			HttpStatus.FORBIDDEN,
+			"Forbidden Action",
+			"Only administrators can create new administrators."),
 	RECORD_NOT_FOUND(
 			HttpStatus.NOT_FOUND,
 			"Resource Not Found",

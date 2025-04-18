@@ -55,7 +55,20 @@ public class PedidoController {
     @SwaggerApiResponses
     @Operation(summary = "Obtener un pedido por su ID", description = "Devuelve un pedido específico basado en su ID.")
     public PedidoDTO getPedido(@PathVariable Integer id) {
-        return pedidoService.getPedido(id);
+        return pedidoService.getPedidoById(id);
+    }
+
+    /**
+     * Obtener un pedido por su nombre
+     * 
+     * @param nombre Nombre del pedido a obtener
+     * @return PedidoDTO DTO para la transferencia de pedidos, pedido encontrado
+     */
+    @GetMapping("/name/{name}")
+    @SwaggerApiResponses
+    @Operation(summary = "Obtener un pedido por su nombre", description = "Devuelve un pedido específico basado en su nombre.")
+    public PedidoDTO getPedidoByNombre(@PathVariable String nombre) {
+        return pedidoService.getPedidoByNombre(nombre);
     }
 
      /**
@@ -85,16 +98,16 @@ public class PedidoController {
     }
     
     /**
-     * Actualizar un pedido existente, deven existir previamente los productos y el usuario
+     * Actualizar un pedido existente por id, deven existir previamente los productos y el usuario
      * 
      * @param pedidoDTO DTO DTO para la transferencia de pedidos, se compone de el id del usuario y una lista de ids de productos
      * @return PedidoDTO DTO para la transferencia de pedidos
      */
-    @PutMapping()
+    @PutMapping("/{id}")
     @SwaggerApiResponses
     @Operation(summary = "Actualizar un pedido existente", description = "Actualiza un pedido existente basado en el DTO proporcionado.")
     public PedidoDTO putPedido(@RequestBody PedidoDTO pedidoDTO) {
-        return pedidoService.putPedido(pedidoDTO);
+        return pedidoService.putPedidoById(pedidoDTO);
     }
 
      /**
@@ -106,7 +119,7 @@ public class PedidoController {
     @SwaggerApiResponses
     @Operation(summary = "Eliminar un pedido por su ID", description = "Elimina un pedido específico basado en su ID.")
     @ResponseStatus(HttpStatus.NO_CONTENT) 
-    public void deletePedido(@RequestParam Integer id)  {
-        pedidoService.deletePedido(id);
+    public void deletePedidoById(@PathVariable Integer id)  {
+        pedidoService.deletePedidoById(id);
     }
 }

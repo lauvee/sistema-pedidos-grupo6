@@ -1,13 +1,11 @@
 package com.grupo06.sistemapedidos.service;
 
 import java.time.LocalDate;
-
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
-
 import com.grupo06.sistemapedidos.exception.RequestException;
 import com.grupo06.sistemapedidos.model.Pedido;
 import com.grupo06.sistemapedidos.model.PedidoEvento;
@@ -15,14 +13,11 @@ import com.grupo06.sistemapedidos.utilities.ColorUtils;
 
 /**
  * Servicio que consume mensajes de Kafka para diversos eventos relacionados con los pedidos.
- * <p>
  * Este servicio implementa listeners para tres tópicos:
- * <ul>
- *   <li><strong>pedido-creado</strong>: Notifica la creación de un pedido.</li>
- *   <li><strong>pedido-modificado</strong>: Notifica la modificación de un pedido.</li>
- *   <li><strong>pedido-cancelado</strong>: Notifica la cancelación de un pedido.</li>
- * </ul>
- * </p>
+ * - pedido-creado</strong>: Notifica la creación de un pedido.
+ * - pedido-modificado</strong>: Notifica la modificación de un pedido.
+ * - pedido-cancelado</strong>: Notifica la cancelación de un pedido.
+*
  * Un consumer de Kafka es un componente que se suscribe a un tópico y procesa los mensajes que recibe en una cola.
  * Los consumers son responsables de recibir y procesar los mensajes enviados por los producers.
  * Procesa los mensajes de forma asíncrona. 

@@ -5,10 +5,10 @@ import com.grupo06.sistemapedidos.enums.ApiError;
 import com.grupo06.sistemapedidos.enums.RoleEnum;
 import com.grupo06.sistemapedidos.exception.RequestException;
 import com.grupo06.sistemapedidos.mapper.UserMapper;
-import com.grupo06.sistemapedidos.model.Roles;
 import com.grupo06.sistemapedidos.model.Usuario;
-import com.grupo06.sistemapedidos.repository.RoleRepository;
 import com.grupo06.sistemapedidos.repository.UserRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,18 +23,15 @@ import java.util.Optional;
  */
 @Service
 public class UserService {
-
     private final UserMapper userMapper;
     private final UserRepository userRepository;
     private final JwtTokenService jwtTokenService;
-    private final RoleRepository roleRepository;
 
     public UserService(UserMapper userMapper, UserRepository userRepository,
-                       JwtTokenService jwtTokenService, RoleRepository roleRepository) {
+                       JwtTokenService jwtTokenService) {
         this.userMapper = userMapper;
         this.userRepository = userRepository;
         this.jwtTokenService = jwtTokenService;
-        this.roleRepository = roleRepository;
     }
 
     /**
@@ -42,12 +39,23 @@ public class UserService {
      *
      * Este método verifica si el usuario ya existe por su correo electrónico. Si no existe, guarda un nuevo usuario en la base de datos.
      * Si el campo `totalSpend` está vacío, se asigna un valor predeterminado de 0.
-     *
+     * {@link Authentication} Se utiliza para verificar si el usuario que está creando un nuevo usuario es un administrador.
+     * {@link JwtTokenService} Se utiliza para encriptar la contraseña del usuario antes de guardarla.
+     * 
      * @param userDTO DTO con los datos del usuario a registrar.
      * @return UsuarioDTO DTO con los datos del usuario registrado.
      */
     public UsuarioDTO userRegistry(UsuarioDTO userDTO) {
         try {
+            // Obtenemos el contexto de Spring Security para verificar si el usuario que está creando un admin es también admin
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            boolean isAdmin = authentication.getAuthorities().stream()
+                        .anyMatch(a -> a.getAuthority().equals("ADMIN"));
+
+            // Si estamos creamo un usuario admin y el usuario que lo crea no es admin, lanzamos una excepción
+            if(userDTO.getRol() == RoleEnum.ADMIN && !isAdmin)
+                throw new RequestException(ApiError.FORBIDDEN_CREATE_ADMIN);
+
             Optional<Usuario> optionalUser = userRepository.findByEmailAndName(userDTO.getEmail(), userDTO.getName());
             if (!optionalUser.isPresent()) {
                 // Si el usuario no existe, se procede a crear uno nuevo, generamos el token y lo encriptamos
@@ -55,7 +63,6 @@ public class UserService {
                 
                 // Utilizamos BCryptPasswordEncoder para encriptar la contraseña
                 usuario.setPassword(jwtTokenService.encodePassword(userDTO.getPassword()));
-
                 // Lo almacenamos en la base de datos
                 Usuario newUser = userRepository.save(usuario);
                 return userMapper.toDTO(newUser);
@@ -201,39 +208,20 @@ public class UserService {
         }
     }
 
+    /**
+     * Método para actualizar un usuario por su ID.
+     * 
+     * @param id ID del usuario a actualizar
+     * @param entity DTO con los nuevos datos del usuario
+     * @return UsuarioDTO DTO con los datos actualizados del usuario
+     */
     public UsuarioDTO putUserById(Integer id, UsuarioDTO entity) {
         try {
             Optional<Usuario> optionalUser = userRepository.findById(id);
             if (optionalUser.isPresent()  && optionalUser.get().getId().equals(id)) {
-                Usuario user = optionalUser.get();
+                Usuario newUser = userMapper.toEntity(entity);
+                newUser.setId(id); 
 
-                if(entity.getName() != null) 
-                    user.setName(entity.getName());
-                
-                if(entity.getEmail() != null) 
-                    user.setEmail(entity.getEmail());
-
-                if(entity.getPassword() != null) 
-                    user.setPassword(jwtTokenService.encodePassword(entity.getPassword()));
-                
-                if(entity.getSignUpDate() != null) 
-                    user.setSignUpDate(entity.getSignUpDate());
-                
-                if(entity.getTotalSpend() != null) 
-                    user.setTotalSpend(entity.getTotalSpend());
-                
-                if(entity.getRol() != null) {
-                    RoleEnum role = RoleEnum.valueOf(entity.getRol().toString());
-                    Optional<Roles> roleEntity = roleRepository.findByName(role);
-                    if(roleEntity.isPresent()) {
-                        user.setRole(roleEntity.get());
-                    } else {
-                        throw new RequestException(ApiError.ROLE_NOT_FOUND);
-                    }
-                }
-
-                // Guardamos el usuario actualizado en la base de datos
-                Usuario newUser =userRepository.save(user);
                 return userMapper.toDTO(newUser);
             } else {
                 throw new RequestException(ApiError.USER_NOT_FOUND);
@@ -246,43 +234,18 @@ public class UserService {
     /**
      * Método para actualizar un usuario por su correo electrónico.
      * 
-     * @param email
-     * @param entity
-     * @return
+     * @param email Correo electrónico del usuario a actualizar
+     * @param entity DTO con los nuevos datos del usuario
+     * @return UsuarioDTO DTO con los datos actualizados del usuario
      */
     public UsuarioDTO putUserByEmail(String email, UsuarioDTO entity) {
         try {
             Optional<Usuario> optionalUser = userRepository.findByEmail(email);
             if (optionalUser.isPresent()  && optionalUser.get().getEmail().equals(email)) {
-                Usuario user = optionalUser.get();
-                if(entity.getName() != null) 
-                    user.setName(entity.getName());
-                
-                if(entity.getEmail() != null) 
-                    user.setEmail(entity.getEmail());
+                Usuario user = userMapper.toEntity(entity);
+                user.setId(optionalUser.get().getId()); 
+                return userMapper.toDTO(user);
 
-                if(entity.getPassword() != null) 
-                    user.setPassword(jwtTokenService.encodePassword(entity.getPassword()));
-                
-                if(entity.getSignUpDate() != null) 
-                    user.setSignUpDate(entity.getSignUpDate());
-                
-                if(entity.getTotalSpend() != null) 
-                    user.setTotalSpend(entity.getTotalSpend());
-                
-                if(entity.getRol() != null) {
-                    RoleEnum role = RoleEnum.valueOf(entity.getRol().toString());
-                    Optional<Roles> roleEntity = roleRepository.findByName(role);
-                    if(roleEntity.isPresent()) {
-                        user.setRole(roleEntity.get());
-                    } else {
-                        throw new RequestException(ApiError.ROLE_NOT_FOUND);
-                    }
-                }
-
-                // Guardamos el usuario actualizado en la base de datos
-                Usuario newUser = userRepository.save(user);
-                return userMapper.toDTO(newUser);
             } else {
                 throw new RequestException(ApiError.USER_NOT_FOUND);
             }
@@ -293,7 +256,6 @@ public class UserService {
 
     /**
      * Método para eliminar un usuario por su ID.
-     *
      * Este método elimina un usuario de la base de datos utilizando su identificador único.
      *
      * @param id ID del usuario a eliminar.
@@ -309,7 +271,7 @@ public class UserService {
     /**
      * Método para eliminar un usuario por su correo electrónico.
      * 
-     * @param email
+     * @param email Correo electrónico del usuario a eliminar
      */
     public void deleteUserByEmail(String email) {
         try {

@@ -166,7 +166,6 @@ public class UserController {
      * Eliminar un usuario por su ID
      *
      * @param id ID del usuario
-     * @return Respuesta HTTP sin contenido
      */
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')") 

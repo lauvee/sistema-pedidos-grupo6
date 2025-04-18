@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+
 /**
  * Controlador REST para gestionar productos en el sistema de pedidos.
  * Proporciona endpoints para crear, obtener, actualizar y eliminar productos.
@@ -55,12 +56,26 @@ public class ProductController {
     @GetMapping("/{id}") 
     @SwaggerApiResponses 
     @Operation(summary = "Obtener un producto por su ID", description = "Devuelve un producto específico basado en su ID.")
-    public ProductDTO getProducto(@PathVariable Integer id) {
+    public ProductDTO getProductoById(@PathVariable Integer id) {
         // Busca el producto por ID y devuelve una respuesta HTTP adecuada
-        return productoService.findById(id);
+        return productoService.getProductoById(id);
     }
 
     /**
+     * Obtiene un producto por su nombre
+     * 
+     * @param nombre Nombre del producto a obtener
+     * @return ProductDTO DTO para la transferencia de productos, producto encontrado
+     */
+    @GetMapping("/name/{name}")
+    @SwaggerApiResponses
+    @Operation(summary = "Obtener un producto por su nombre", description = "Devuelve un producto específico basado en su nombre.")
+    public ProductDTO getProductoByName(@PathVariable String name) {
+        // Busca el producto por nombre y devuelve una respuesta HTTP adecuada
+        return productoService.getProductoByName(name);
+    }
+
+     /**
      * Obtiene todos los productos
      * 
      * @return List<ProductDTO> DTO para la transferencia de productos
@@ -70,7 +85,7 @@ public class ProductController {
      @Operation(summary = "Obtener todos los productos", description = "Devuelve una lista de todos los productos.")
      public List<ProductDTO> getAllProductos() {
          // Devuelve una lista de todos los productos almacenados en la base de datos
-         return productoService.findAll();
+         return productoService.getAllProductos();
      }
  
      /**
@@ -85,7 +100,7 @@ public class ProductController {
      @ResponseStatus(HttpStatus.CREATED)
      public ProductDTO postProducto(@RequestBody ProductDTO productDTO) {
          // Guarda el producto recibido en el cuerpo de la solicitud y lo devuelve
-         return productoService.postProducto(productDTO);
+         return productoService.postProduct(productDTO);
      }
  
     /**
@@ -97,16 +112,16 @@ public class ProductController {
      @PutMapping("/{id}")
      @SwaggerApiResponses 
      @Operation(summary = "Actualizar un producto por su ID", description = "Actualiza un producto específico basado en su ID.")
-     public ResponseEntity<ProductDTO> putProducto(@PathVariable Integer id, @RequestBody ProductDTO productDTO) {
-         // Verifica si el producto con el ID especificado existe
-         if (productoService.findById(id) == null) {
-             return ResponseEntity.notFound().build(); // Si no existe, devuelve 404 Not Found
-         }
-         ProductDTO updatedProducto = productoService.postProducto(productDTO);
-         // Devuelve 200 OK con el producto actualizado
-         return ResponseEntity.ok(updatedProducto);
+     public ProductDTO updateProductById(@PathVariable Integer id, @RequestBody ProductDTO productDTO) {
+         return productoService.updateProductById(id, productDTO);
      }
 
+     @PutMapping("/name/{name}")
+     @SwaggerApiResponses 
+     @Operation(summary = "Actualizar un producto por su ID", description = "Actualiza un producto específico basado en su ID.")
+     public ProductDTO updateProductByName(@PathVariable String name, @RequestBody ProductDTO productDTO) {
+         return productoService.updateProductByName(name.toLowerCase().trim().replace(" ", "-"), productDTO);
+     }
     
    /**
     * Elimina un producto por su ID
@@ -117,14 +132,29 @@ public class ProductController {
     @SwaggerApiResponses 
     @Operation(summary = "Eliminar un producto por su ID", description = "Elimina un producto específico basado en su ID.")
     @ResponseStatus(HttpStatus.NO_CONTENT) 
-    public ResponseEntity<Void> deleteProducto(@PathVariable Integer id) {
+    public ResponseEntity<Void> deleteProduct(@PathVariable Integer id) {
         // Verifica si el producto con el ID especificado existe
-        if (productoService.findById(id) == null) {
+        if (productoService.getProductoById(id) == null) {
             return ResponseEntity.notFound().build(); // Si no existe, devuelve 404 Not Found
         }
         // Elimina el producto por su ID
         productoService.deleteById(id);
          
+        return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Elimina un producto por su nombre, formato ejemplo: "nombre-producto"
+     * 
+     * @param name Nombre del producto a eliminar
+     * @return ResponseEntity<Void> Respuesta HTTP sin contenido
+     */
+    @DeleteMapping("/del/name/{name}")
+    @SwaggerApiResponses
+    @Operation(summary = "Eliminar un producto por su nombre", description = "Elimina un producto específico basado en su nombre.")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<Void> deleteProductByName(@PathVariable String name) {
+        productoService.deleteByName(name);
         return ResponseEntity.noContent().build();
     }
 }

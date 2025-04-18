@@ -5,16 +5,12 @@ import org.springframework.stereotype.Service;
 
 /**
  * Servicio productor de mensajes para Kafka.
- * <p>
  * Este servicio se encarga de enviar notificaciones a distintos tópicos de Kafka asociados a eventos
  * en el sistema de pedidos, tales como la creación, modificación y cancelación. Es utilizado para informar
  * a otros servicios o procesos cuando ocurre un evento relevante.
- * </p>
- * <p>
  * En Kafka, un producer es un componente que envía mensajes a un tópico específico en el clúster. Los producers
  * son responsables de serializar los mensajes y enviarlos a las particiones correspondientes, facilitando la distribución
  * y entrega de la información de forma efectiva.
- * </p>
  * 
  * {@link Service} indica que esta clase es un servicio de Spring, lo que permite la inyección de dependencias y
  * la gestión del ciclo de vida del bean.

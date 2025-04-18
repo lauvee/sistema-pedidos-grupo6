@@ -3,19 +3,19 @@ package com.grupo06.sistemapedidos.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import com.grupo06.sistemapedidos.dto.PedidoDTO;
-import com.grupo06.sistemapedidos.dto.ProductDTO;
-import com.grupo06.sistemapedidos.dto.UsuarioDTO;
 import com.grupo06.sistemapedidos.enums.ApiError;
 import com.grupo06.sistemapedidos.exception.RequestException;
 import com.grupo06.sistemapedidos.mapper.PedidoMapper;
-import com.grupo06.sistemapedidos.mapper.ProductMapper;
-import com.grupo06.sistemapedidos.mapper.UserMapper;
 import com.grupo06.sistemapedidos.model.Pedido;
 import com.grupo06.sistemapedidos.model.Producto;
 import com.grupo06.sistemapedidos.model.Usuario;
 import com.grupo06.sistemapedidos.repository.PedidoRepository;
+import com.grupo06.sistemapedidos.repository.ProductRepository;
+import com.grupo06.sistemapedidos.repository.UserRepository;
 
 /**
  * Clase de servicio para manejar la lógica de negocio relacionada con los pedidos.
@@ -32,21 +32,17 @@ public class PedidoService {
      * UserService es un objeto que se encarga de manejar la lógica de negocio relacionada con los usuarios.
      * UserMapper es un objeto que se encarga de convertir entre entidades y DTOs de usuarios.
      */
-    private final PedidoRepository pedidoRepository;
     private final PedidoMapper pedidoMapper; 
-    private final UserService userService;
-    private final UserMapper userMapper;
-    private final ProductService productService;
-    private final ProductMapper productMapper;
+    private final PedidoRepository pedidoRepository;
+    private final UserRepository userRepository;
+    private final ProductRepository productRepository;
     private final KafkaProducerService kafkaProducerService;
 
-    public PedidoService (PedidoMapper pedidoMapper, PedidoRepository pedidoRepository, UserService userService, UserMapper userMapper, ProductService productService, ProductMapper productMapper, KafkaProducerService kafkaProducerService) {
+    public PedidoService (PedidoMapper pedidoMapper, PedidoRepository pedidoRepository, UserRepository userRepository, ProductRepository productRepository, KafkaProducerService kafkaProducerService) {
         this.pedidoRepository = pedidoRepository;
         this.pedidoMapper = pedidoMapper;
-        this.userService = userService;
-        this.userMapper = userMapper;
-        this.productService = productService;
-        this.productMapper = productMapper;
+        this.userRepository = userRepository;
+        this.productRepository = productRepository;
         this.kafkaProducerService = kafkaProducerService;
     }
 
@@ -55,11 +51,26 @@ public class PedidoService {
      * 
      * @param id ID del pedido a obtener
      * @return PedidoDTO DTO para la transferencia de pedidos, pedido encontrado
-     * @throws Exception
      */
-    public PedidoDTO getPedido(int id)  {
+    public PedidoDTO getPedidoById(int id)  {
         try {
             Optional<Pedido> newPedidoOptional = pedidoRepository.findById(id);
+            if(!newPedidoOptional.isPresent())
+                throw new RequestException(ApiError.PEDIDO_NOT_FOUND);
+            
+            Pedido newPedido = newPedidoOptional.get();
+            PedidoDTO newPedidoDTO = pedidoMapper.toDTO(newPedido);
+            return newPedidoDTO;
+        } catch (RequestException e) {
+            throw e;
+        } catch (Exception e) {
+           throw new RequestException(ApiError.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public PedidoDTO getPedidoByNombre(String nombre)  {
+        try {
+            Optional<Pedido> newPedidoOptional = pedidoRepository.findById(1);
             PedidoDTO newPedidoDTO = null;
             if(newPedidoOptional.isPresent()){
                 Pedido newPedido = newPedidoOptional.get();
@@ -75,11 +86,10 @@ public class PedidoService {
      * Obtiene todos los pedidos.
      * 
      * @return List<PedidoDTO> DTO para la transferencia de pedidos
-     * @throws Exception
      */
     public List<PedidoDTO> getAllPedidos()  {
         try {
-            List<Pedido> listaPedidos = pedidoRepository.findAll();
+        List<Pedido> listaPedidos = pedidoRepository.findAll();
         List<PedidoDTO> listaPedidosDTO = listaPedidos.stream()
                 .map(pedidoMapper::toDTO)
                 .toList();
@@ -96,14 +106,17 @@ public class PedidoService {
      * 
      * @param pedidoDTO DTO para la transferencia de pedidos
      * @return PedidoDTO DTO para la transferencia de pedidos
-     * @throws Exception
      */
     public PedidoDTO postPedido(PedidoDTO pedidoDTO) {
         try {
-            // Añadmir un evento al topic de Kafka
-            String eventMessage = "Nuevo pedido de usuario " + pedidoDTO.getUsuario() + " con productos " + pedidoDTO.getProductos();
-            kafkaProducerService.sendOrderCreated(eventMessage);
+            // Verificamos si el usuario que hace la peticion ya hizo un pedido
+            if(pedidoRepository.existsByUsuarioId(pedidoDTO.getUsuario()))
+                throw new RequestException(ApiError.USER_ALREADY_HAS_ORDER);
 
+            // Añadmir un evento al topic de Kafka
+            kafkaProducerService.sendOrderCreated("Nuevo pedido de usuario " + pedidoDTO.getUsuario() + " con productos " + pedidoDTO.getProductos());
+
+            // Obtenemos el usuario de la fk
             Usuario usuarioEntity = getUsuarioEntityByFK(pedidoDTO);
             List<Producto> listaProductos = getListProductosFK(pedidoDTO);
 
@@ -111,6 +124,10 @@ public class PedidoService {
             Pedido newPedido = pedidoMapper.toEntity(usuarioEntity, listaProductos);
             Pedido pedidoSave = pedidoRepository.save(newPedido);
             return pedidoMapper.toDTO(pedidoSave);
+        } catch (RequestException e) {
+            // Tanto getUsuarioEntityByFK como getListProductosFK pueden lanzar una RequestException
+            // si no se encuentra el usuario o el producto, por lo que la excepción se lanza y se maneja aquí
+            throw e;
         } catch (Exception e) {
             throw new RequestException(ApiError.INTERNAL_SERVER_ERROR);
         }
@@ -121,9 +138,8 @@ public class PedidoService {
      * 
      * @param pedidoDTO DTO para la transferencia de pedidos
      * @return PedidoDTO DTO para la transferencia de pedidos
-     * @throws Exception
      */
-    public PedidoDTO putPedido(PedidoDTO pedidoDTO) {
+    public PedidoDTO putPedidoById(PedidoDTO pedidoDTO) {
         try {
             String eventMessage = "Pedido modificado de usuario " + pedidoDTO.getUsuario() + " con productos " + pedidoDTO.getProductos();
             kafkaProducerService.sendModificationNotification(eventMessage);
@@ -144,7 +160,7 @@ public class PedidoService {
      * 
      * @param id ID del pedido a eliminar
      */
-    public void deletePedido(Integer id){
+    public void deletePedidoById(Integer id){
         try {
             String eventMessage = "Pedido eliminado con id " + id;
             kafkaProducerService.sendCancellationNotification(eventMessage);
@@ -156,7 +172,6 @@ public class PedidoService {
         
     }
 
-    /// Utilidades
     /**
      * Método para obtener todos los productos asicaidos a traves de una lista de IDs
      * 
@@ -167,10 +182,15 @@ public class PedidoService {
         try {
             List<Producto> listaProductos = new ArrayList<>();
             for(Integer idPedido : pedidoDTO.getProductos()){
-                ProductDTO childPedido = productService.findById(idPedido);
-                listaProductos.add(productMapper.toEntity(childPedido));
+                Optional<Producto> newProducto = productRepository.findById(idPedido);
+                // Verificamos que el producto existe, si no existe lanzamos una excepción
+                if(!newProducto.isPresent())
+                    throw new RequestException(ApiError.PRODUCT_NOT_FOUND);
+                listaProductos.add(newProducto.get());
             }
             return listaProductos;
+        } catch (RequestException e) {
+            throw e;
         } catch (Exception e) {
             throw new RequestException(ApiError.INTERNAL_SERVER_ERROR);
         }
@@ -184,9 +204,14 @@ public class PedidoService {
      */
     public Usuario getUsuarioEntityByFK(PedidoDTO pedidoDTO) throws Exception {
         try {
-            UsuarioDTO usuario = userService.getUserById(pedidoDTO.getUsuario());
-            Usuario usuarioEntity = userMapper.toEntity(usuario);
-            return usuarioEntity;
+            // Obtenemos el usuario si no existe lanzamos una excepción
+            Optional<Usuario> newUsuario = userRepository.findById(pedidoDTO.getUsuario());
+            if(!newUsuario.isPresent())
+                throw new RequestException(ApiError.USER_NOT_FOUND);
+            
+            return newUsuario.get();
+        } catch (RequestException e) {
+            throw e;
         } catch (Exception e) {
             throw new RequestException(ApiError.INTERNAL_SERVER_ERROR);
         }

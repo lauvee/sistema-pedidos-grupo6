@@ -48,6 +48,12 @@ public class RoleService {
         }
     }
 
+    /**
+     * Método para obtener un rol por su nombre.
+     * 
+     * @param name Nombre del rol a buscar.
+     * @return RolesDTO DTO que representa el rol encontrado.
+     */
     public RolesDTO getRoleByName(RoleEnum name) {
         try {
             Optional<Roles> role = roleRepository.findByName(name);
@@ -124,9 +130,9 @@ public class RoleService {
     /**
      * Método para actualizar un rol por su nombre.
      * 
-     * @param name
-     * @param entity
-     * @return
+     * @param name Nombre del rol a actualizar.
+     * @param entity Objeto Roles que representa el rol a actualizar.
+     * @return El rol actualizado.
      */
     public void updateRoleByName(String name, RolesDTO entity) {
         try {

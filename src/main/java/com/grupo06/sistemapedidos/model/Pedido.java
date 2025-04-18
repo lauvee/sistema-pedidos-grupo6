@@ -1,5 +1,6 @@
 package com.grupo06.sistemapedidos.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.persistence.Column;
@@ -15,6 +16,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Clase que representa un pedido en el sistema en la base de datos, osea la entidad.
@@ -32,6 +34,7 @@ import lombok.Data;
 @Table(name = "PEDIDO", schema = "public")
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,5 +53,5 @@ public class Pedido {
         joinColumns = @JoinColumn(name = "pedido_id"),
         inverseJoinColumns = @JoinColumn(name = "producto_id")
     )
-    private List<Producto> productos;
+    private List<Producto> productos = new ArrayList<>();
 }
