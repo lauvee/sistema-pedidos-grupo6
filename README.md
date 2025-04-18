@@ -42,6 +42,7 @@ cd sistema-pedidos
 jwt.secret.key=demo_key
 spring.datasource.username=demo_user
 spring.datasource.password=demo_password
+# En el caso de querer utilizar PostgreSQL, debes crear una base de datos y usar su Query Tool con los comandos del archivo `sistema_pedidos.sql` para crear las tablas y el usuario. Luego, configura el archivo `application.properties` con las variables necesarias.
 
 # Enciende el servidor de Kafka, Kafka UI y Zookeeper con Docker:
 docker-compose up -d # -d (opcional) para que se ejecute en segundo plano
@@ -68,6 +69,7 @@ mvn spring-boot:run
 ## Endpoints 🔗
 
 Para mas documentacion visitar la cocumentacion de Swagger en el siguiente enlace: [Swagger](http://localhost:8080/swagger-ui/index.html#/)
+Puedes probar los endpoints en Postman, para ello puedes importar el archivo `sistemas_pedidos.postman.json` que se encuentra en la raiz del proyecto.
 
 ### Usuarios
 
