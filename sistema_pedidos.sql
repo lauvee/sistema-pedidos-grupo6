@@ -4,7 +4,7 @@ CREATE TABLE "USUARIO" (
 	"email" varchar NOT NULL,
 	"password" varchar NOT NULL,
     "signUpDate" date NOT NULL,
-    "totalSpent" integer NOT NULL,
+    "totalSpend" integer NOT NULL,
     "roleFK" integer NOT NULL,
     PRIMARY KEY ("idUser")
 );
@@ -21,8 +21,8 @@ CREATE TABLE "PRODUCTO" (
 CREATE TABLE "PEDIDO" (
     "idPedido" integer NOT NULL,
     "usuarioFK" integer NOT NULL,
-    "pedidoFK" integer NOT NULL,
-    PRIMARY KEY ("idPedido")
+    PRIMARY KEY ("idPedido"),
+    CONSTRAINT "fk_Pedido_usuarioFK_Usuario_idUser" FOREIGN KEY ("usuarioFK") REFERENCES "USUARIO"("idUser")
 );
 
 CREATE TABLE "ROLES" (
@@ -40,15 +40,8 @@ CREATE TABLE "PEDIDO_EVENTO" (
     PRIMARY KEY ("idEvento")
 );
 
+-- Añadimos la relación entre USUARIO y ROLES
 ALTER TABLE "USUARIO"
 ADD CONSTRAINT "fk_Usuario_roleFK_Roles_idRol"
 FOREIGN KEY("roleFK") REFERENCES "ROLES"("idRol")
 ON DELETE CASCADE;
-
-ALTER TABLE "PEDIDO"
-ADD CONSTRAINT "fk_Pedido_usuarioFK_Usuario_idUser"
-FOREIGN KEY("usuarioFK") REFERENCES "USUARIO"("idUser");
-
-ALTER TABLE "PEDIDO"
-ADD CONSTRAINT "fk_Pedido_pedidoFK_Producto_idProducto"
-FOREIGN KEY("pedidoFK") REFERENCES "PRODUCTO"("idProducto");

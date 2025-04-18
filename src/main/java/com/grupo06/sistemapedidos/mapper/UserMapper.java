@@ -40,7 +40,7 @@ public class UserMapper {
                 usuario.getName(),
                 usuario.getEmail(),
                 usuario.getSignUpDate(),
-                usuario.getTotalSpend(),
+                usuario.getTotalSpent(),
                 roleEnum
         );
     }
@@ -63,7 +63,7 @@ public class UserMapper {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         usuario.setPassword(encoder.encode(usuarioDTO.getPassword()));
         usuario.setSignUpDate(usuarioDTO.getSignUpDate());
-        usuario.setTotalSpend(usuarioDTO.getTotalSpend() != null ? usuarioDTO.getTotalSpend() : 0);
+        usuario.setTotalSpent(usuarioDTO.getTotalSpent() != null ? usuarioDTO.getTotalSpent() : 0);
 
         // Buscar el rol en la base de datos
         RoleEnum roleEnum = RoleEnum.valueOf(usuarioDTO.getRol().toString());

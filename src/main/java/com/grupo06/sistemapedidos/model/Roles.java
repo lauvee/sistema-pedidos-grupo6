@@ -37,7 +37,7 @@ public class Roles {
 
     @NotNull(message = "El nombre del rol no puede ser nulo")
     @Enumerated(EnumType.STRING)
-    @Column(name = "name", nullable = false, length = 20)
+    @Column(name = "name", nullable = false, length = 10)
     private RoleEnum name;
 
     @NotNull(message = "La descripción no puede ser nula")

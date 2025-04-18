@@ -2,12 +2,7 @@ package com.grupo06.sistemapedidos.repository;
 
 import com.grupo06.sistemapedidos.enums.RoleEnum;
 import com.grupo06.sistemapedidos.model.Roles;
-
-import jakarta.transaction.Transactional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

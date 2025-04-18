@@ -48,6 +48,12 @@ public class RoleService {
         }
     }
 
+    /**
+     * Método para obtener un rol por su nombre.
+     * 
+     * @param name Nombre del rol a buscar.
+     * @return RolesDTO DTO que representa el rol encontrado.
+     */
     public RolesDTO getRoleByName(RoleEnum name) {
         try {
             Optional<Roles> role = roleRepository.findByName(name);
@@ -108,8 +114,12 @@ public class RoleService {
     public void updateRoleById(Integer id, RolesDTO entity) {
         try {
             Optional<Roles> role = roleRepository.findById(id);
+            Optional<Roles> roleName = roleRepository.findByName(entity.getName());
             if(!role.isPresent())
                 throw new RequestException(ApiError.ROLE_NOT_FOUND);
+            if(roleName.isPresent())
+                throw new RequestException(ApiError.ROLE_ALREADY_EXISTS);
+            
 
             Roles updatedRole = roleMapper.toEntity(entity);
             updatedRole.setId(role.get().getId());
@@ -124,15 +134,18 @@ public class RoleService {
     /**
      * Método para actualizar un rol por su nombre.
      * 
-     * @param name
-     * @param entity
-     * @return
+     * @param name Nombre del rol a actualizar.
+     * @param entity Objeto Roles que representa el rol a actualizar.
+     * @return El rol actualizado.
      */
     public void updateRoleByName(String name, RolesDTO entity) {
         try {
             Optional<Roles> role = roleRepository.findByName(RoleEnum.valueOf(name.toUpperCase()));
+            Optional<Roles> newRole = roleRepository.findByName(entity.getName());
             if(!role.isPresent())
                 throw new RequestException(ApiError.ROLE_NOT_FOUND);
+            if(newRole.isPresent())
+                throw new RequestException(ApiError.ROLE_ALREADY_EXISTS);
 
             Roles updatedRole = roleMapper.toEntity(entity);
             updatedRole.setId(role.get().getId());

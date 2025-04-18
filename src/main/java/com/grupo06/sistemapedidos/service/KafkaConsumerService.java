@@ -1,28 +1,22 @@
 package com.grupo06.sistemapedidos.service;
 
 import java.time.LocalDate;
-
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
-
 import com.grupo06.sistemapedidos.exception.RequestException;
-import com.grupo06.sistemapedidos.model.Pedido;
 import com.grupo06.sistemapedidos.model.PedidoEvento;
 import com.grupo06.sistemapedidos.utilities.ColorUtils;
 
 /**
  * Servicio que consume mensajes de Kafka para diversos eventos relacionados con los pedidos.
- * <p>
  * Este servicio implementa listeners para tres tópicos:
- * <ul>
- *   <li><strong>pedido-creado</strong>: Notifica la creación de un pedido.</li>
- *   <li><strong>pedido-modificado</strong>: Notifica la modificación de un pedido.</li>
- *   <li><strong>pedido-cancelado</strong>: Notifica la cancelación de un pedido.</li>
- * </ul>
- * </p>
+ * - pedido-creado</strong>: Notifica la creación de un pedido.
+ * - pedido-modificado</strong>: Notifica la modificación de un pedido.
+ * - pedido-cancelado</strong>: Notifica la cancelación de un pedido.
+*
  * Un consumer de Kafka es un componente que se suscribe a un tópico y procesa los mensajes que recibe en una cola.
  * Los consumers son responsables de recibir y procesar los mensajes enviados por los producers.
  * Procesa los mensajes de forma asíncrona. 
@@ -39,6 +33,7 @@ import com.grupo06.sistemapedidos.utilities.ColorUtils;
 */
 @Service
 public class KafkaConsumerService {
+
     private final KafkaProducerService kafkaProducerService;
     private final PedidoEventoService pedidoEventoService;
 
@@ -61,14 +56,9 @@ public class KafkaConsumerService {
         backoff = @Backoff(delay = 2000)
     )
     @KafkaListener(topics = "pedido-creado", groupId = "pedido_creado_group")
-    public void listenCreado(String message, Pedido pedido) throws Exception {
-        if(pedido == null){
-            throw new Exception();
-        }
-
+    public void listenCreado(String message) throws Exception {
         // Guardamops el evento en la base de datos para generar persistencia
-        String eventMessage = "Pedido con el id " + pedido.getId() + " del usuario" + pedido.getUsuario().getId() + " creado";
-        PedidoEvento pedidoEvento = new PedidoEvento("pedido-creado", eventMessage , LocalDate.now());
+        PedidoEvento pedidoEvento = new PedidoEvento("pedido-creado", message, LocalDate.now());
         pedidoEventoService.saveEvent(pedidoEvento);
 
         System.out.println(ColorUtils.pintarVerde("Pedido creado recibido: " + message));
@@ -87,16 +77,11 @@ public class KafkaConsumerService {
         backoff = @Backoff(delay = 2000)
     )
     @KafkaListener(topics = "pedido-procesado", groupId = "pedido_procesado_group")
-    public void listenProccesed(String message, Pedido pedido) throws Exception {
-        if(pedido == null){
-            throw new Exception();
-        }
-
+    public void listenProccesed(String message) throws Exception {
         // Guardamops el evento en la base de datos para generar persistencia
-        String eventMessage = "Pedido con el id " + pedido.getId() + " del usuario" + pedido.getUsuario().getId() + " procesado";
-        PedidoEvento pedidoEvento = new PedidoEvento("pedido-procesado", eventMessage , LocalDate.now());
+        PedidoEvento pedidoEvento = new PedidoEvento("pedido-procesado", message , LocalDate.now());
         pedidoEventoService.saveEvent(pedidoEvento);
-
+        
         System.out.println(ColorUtils.pintarVerde("Pedido procesado recibido: " + message));
     }
     
@@ -113,14 +98,9 @@ public class KafkaConsumerService {
         backoff = @Backoff(delay = 2000)
     )
     @KafkaListener(topics = "pedido-modificado", groupId = "pedido_modificado_group")
-    public void listenModificado(String message, Pedido pedido) throws Exception {
-        if(pedido == null){
-            throw new Exception();
-        }
-
+    public void listenModificado(String message) throws Exception {
         // Guardamops el evento en la base de datos para generar persistencia
-        String eventMessage = "Pedido con el id " + pedido.getId() + " del usuario" + pedido.getUsuario().getId() + " modificado";
-        PedidoEvento pedidoEvento = new PedidoEvento("pedido-modificado", eventMessage , LocalDate.now());
+        PedidoEvento pedidoEvento = new PedidoEvento("pedido-modificado", message , LocalDate.now());
         pedidoEventoService.saveEvent(pedidoEvento);
 
         System.out.println(ColorUtils.pintarVerde("Pedido modificado recibido: " + message));
@@ -139,19 +119,33 @@ public class KafkaConsumerService {
         backoff = @Backoff(delay = 2000)
     )
     @KafkaListener(topics = "pedido-cancelado", groupId = "pedido_cancelado_group")
-    public void listenCancelado(String message, Pedido pedido) throws Exception {
+    public void listenCancelado(String message) throws Exception {
         // Si el pedido sigue existiendo, lanzamos una excepción para que se reintente el mensaje.
         // En un caso real, aquí se podría enviar el mensaje a un dead-letter topic o manejarlo de otra manera.
-        if(pedido == null){
-            throw new Exception();
-        }
-
         // Modificamos el estado del pedido a cancelado
-        String eventMessage = "Pedido con el id " + pedido.getId() + " del usuario" + pedido.getUsuario().getId() + " cancelado";
-        PedidoEvento pedidoEvento = new PedidoEvento("pedido-cancelado", eventMessage , LocalDate.now());
+        PedidoEvento pedidoEvento = new PedidoEvento("pedido-cancelado", message , LocalDate.now());
         pedidoEventoService.saveEvent(pedidoEvento);
 
         System.out.println(ColorUtils.pintarRojo("Pedido cancelado recibido: " + message));
+    }
+
+    /**
+     * Escucha y procesa los mensajes del tópico "pedido-dead-letter". Es una convención para manejar mensajes que no se pudieron procesar.
+     * 
+     * @param message el mensaje recibido que indica la creación de un pedido.
+     */
+    @KafkaListener(topics = "pedido-dead-letter", groupId = "dead_letter_group")
+    public void listenDeadLetter(String message) {
+        try {
+            System.out.println(ColorUtils.pintarRojo("Mensaje en dead letter: " + message));
+            PedidoEvento pedidoEvento = new PedidoEvento("pedido-dead-letter", message , LocalDate.now());
+            pedidoEventoService.saveEvent(pedidoEvento);
+        } catch (Exception e) {
+            // Manejo de excepciones al guardar el evento en la base de datos
+            System.err.println(ColorUtils.pintarRojo("Error en el dead leatter :("));
+            e.printStackTrace();
+        }
+       
     }
 
     /**
@@ -164,16 +158,15 @@ public class KafkaConsumerService {
      * @throws Exception si el pedido es nulo o si ocurre un error al procesar el mensaje.
      */
     @Recover
-    public void fallback(Exception e, String message, Pedido pedido) throws Exception {
+    public void fallback(Exception e, String message) throws Exception {
         // Lo añadimos a un dead-letter topic para que se procese posteriormente
-        String deadLetterMessage = "Error al procesar pedido id: " + pedido.getId() + ", message: " + message;
+        String deadLetterMessage = "Error al procesar pedido message: " + message;
         kafkaProducerService.sendDeadLetter(deadLetterMessage);
 
         // Guardamops el evento en la base de datos para generar persistencia
-        String eventMessage = "Pedido con el id " + pedido.getId() + " del usuario" + pedido.getUsuario().getId() + " ocurrio un error al procesar el pedido";
-        PedidoEvento pedidoEvento = new PedidoEvento("pedido-dead-letter", eventMessage , LocalDate.now());
+        PedidoEvento pedidoEvento = new PedidoEvento("pedido-dead-letter", message , LocalDate.now());
         pedidoEventoService.saveEvent(pedidoEvento);
 
-        System.out.println(ColorUtils.pintarRojo("Error persistente, enviando evento a dead letter: " + pedido.getId()));
+        System.out.println(ColorUtils.pintarRojo(message));
     }
 }

@@ -1,6 +1,7 @@
 package com.grupo06.sistemapedidos.model;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.persistence.*;
@@ -51,5 +52,5 @@ public class Producto {
     private String description;
 
     @ManyToMany(mappedBy = "productos")
-    private List<Pedido> pedidos;
+    private List<Pedido> pedidos = new ArrayList<>();
 }

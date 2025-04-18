@@ -134,6 +134,7 @@ public class SecurityConfig {
                         // Codifica la contraseña predeterminada
                         defaultUser.setPassword(passwordEncoder.encode("admin123"));
                         defaultUser.setRole(adminRole);
+                        defaultUser.setTotalSpent(0);
                         
                         userRepository.save(defaultUser);
                         System.out.println(ColorUtils.pintarVerde("Usuario por defecto creado: " + defaultEmail));

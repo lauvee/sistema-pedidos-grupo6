@@ -10,9 +10,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import javax.crypto.SecretKey;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Filtro de autenticación JWT para validar la autenticación de usuarios a través de un token JWT.
@@ -65,8 +66,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         .build()
                         .parseClaimsJws(token)
                         .getBody();
+                
+                // Extraer el rol del claim
+                Object roleClaim = claims.get("role");
+                List<String> roles = new ArrayList<>();
+                
+                if (roleClaim != null) {
+                    // Añadir el rol a la lista
+                    roles.add(roleClaim.toString());
+                }
 
-                Authentication authentication = new JwtAuthentication(claims.getSubject());
+                // Crear autenticación con los roles
+                Authentication authentication = new JwtAuthentication(claims.getSubject(), roles);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
             } catch (Exception e) {

@@ -64,4 +64,12 @@ public interface PedidoRepository extends JpaRepository<Pedido, Integer> {
      * @return una lista de pedidos que cumplen ambos criterios
      */
     List<Pedido> findByUsuarioAndProductos(Usuario usuario, Producto producto);
+
+    /**
+     * Verifica si existe un pedido asociado a un usuario dado.
+     * 
+     * @param usuarioId
+     * @return
+     */
+    boolean existsByUsuarioId(Integer usuarioId);
 }

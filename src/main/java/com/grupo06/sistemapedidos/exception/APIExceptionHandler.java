@@ -14,7 +14,6 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
-import org.springframework.security.access.AccessDeniedException;
 
 /**
  * Manejador centralizado de excepciones para la API.
