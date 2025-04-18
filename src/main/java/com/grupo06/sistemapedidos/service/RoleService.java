@@ -114,8 +114,12 @@ public class RoleService {
     public void updateRoleById(Integer id, RolesDTO entity) {
         try {
             Optional<Roles> role = roleRepository.findById(id);
+            Optional<Roles> roleName = roleRepository.findByName(entity.getName());
             if(!role.isPresent())
                 throw new RequestException(ApiError.ROLE_NOT_FOUND);
+            if(roleName.isPresent())
+                throw new RequestException(ApiError.ROLE_ALREADY_EXISTS);
+            
 
             Roles updatedRole = roleMapper.toEntity(entity);
             updatedRole.setId(role.get().getId());
@@ -137,8 +141,11 @@ public class RoleService {
     public void updateRoleByName(String name, RolesDTO entity) {
         try {
             Optional<Roles> role = roleRepository.findByName(RoleEnum.valueOf(name.toUpperCase()));
+            Optional<Roles> newRole = roleRepository.findByName(entity.getName());
             if(!role.isPresent())
                 throw new RequestException(ApiError.ROLE_NOT_FOUND);
+            if(newRole.isPresent())
+                throw new RequestException(ApiError.ROLE_ALREADY_EXISTS);
 
             Roles updatedRole = roleMapper.toEntity(entity);
             updatedRole.setId(role.get().getId());

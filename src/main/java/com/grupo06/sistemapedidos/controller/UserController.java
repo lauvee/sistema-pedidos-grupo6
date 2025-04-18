@@ -60,7 +60,6 @@ public class UserController {
     @Operation(summary = "Registrar un nuevo usuario", description = "Permite registrar un usuario sin necesidad de autenticación.")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UsuarioDTO> registerUser(@RequestBody UsuarioDTO userDTO) {
-        System.out.println("Registering user: " + userDTO);
         return ResponseEntity.ok(userService.userRegistry(userDTO));
     }
 

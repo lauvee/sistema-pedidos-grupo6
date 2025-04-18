@@ -3,8 +3,6 @@ package com.grupo06.sistemapedidos.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import com.grupo06.sistemapedidos.dto.PedidoDTO;
 import com.grupo06.sistemapedidos.enums.ApiError;
@@ -113,9 +111,6 @@ public class PedidoService {
             if(pedidoRepository.existsByUsuarioId(pedidoDTO.getUsuario()))
                 throw new RequestException(ApiError.USER_ALREADY_HAS_ORDER);
 
-            // Añadmir un evento al topic de Kafka
-          //2 kafkaProducerService.sendOrderCreated("Nuevo pedido de usuario " + pedidoDTO.getUsuario() + " con productos " + pedidoDTO.getProductos());
-
             // Obtenemos el usuario de la fk
             Usuario usuarioEntity = getUsuarioEntityByFK(pedidoDTO);
             List<Producto> listaProductos = getListProductosFK(pedidoDTO);
@@ -123,6 +118,10 @@ public class PedidoService {
             // Devemos pasarle el usuario asoicado al pedido y la lista de productos
             Pedido newPedido = pedidoMapper.toEntity(usuarioEntity, listaProductos);
             Pedido pedidoSave = pedidoRepository.save(newPedido);
+
+             // Añadmir un evento al topic de Kafka
+            kafkaProducerService.sendOrderCreated("Nuevo pedido de usuario " + pedidoDTO.getUsuario() + " con productos " + pedidoDTO.getProductos());
+
             return pedidoMapper.toDTO(pedidoSave);
         } catch (RequestException e) {
             // Tanto getUsuarioEntityByFK como getListProductosFK pueden lanzar una RequestException
@@ -142,13 +141,14 @@ public class PedidoService {
     public PedidoDTO putPedidoById(PedidoDTO pedidoDTO) {
         try {
             String eventMessage = "Pedido modificado de usuario " + pedidoDTO.getUsuario() + " con productos " + pedidoDTO.getProductos();
-          //2323  kafkaProducerService.sendModificationNotification(eventMessage);
-
+            
             Usuario usuarioEntity = getUsuarioEntityByFK(pedidoDTO);
             List<Producto> listaProductos = getListProductosFK(pedidoDTO);
-
+            
             Pedido newPedido = pedidoMapper.toEntity(usuarioEntity, listaProductos);
             Pedido pedidoSave = pedidoRepository.save(newPedido);
+
+            kafkaProducerService.sendModificationNotification(eventMessage);
             return pedidoMapper.toDTO(pedidoSave);
         } catch (Exception e) {
             throw new RequestException(ApiError.INTERNAL_SERVER_ERROR);
@@ -162,8 +162,11 @@ public class PedidoService {
      */
     public void deletePedidoById(Integer id){
         try {
-            String eventMessage = "Pedido eliminado con id " + id;
-           //123 kafkaProducerService.sendCancellationNotification(eventMessage);
+            Optional<Pedido> newPedidoOptional = pedidoRepository.findById(id);
+            if(!newPedidoOptional.isPresent())
+                throw new RequestException(ApiError.PEDIDO_NOT_FOUND);
+
+            kafkaProducerService.sendCancellationNotification("Pedido eliminado con id " + id);
             // Eliminar el pedido de la base de datos
             pedidoRepository.deleteById(id);
         } catch (Exception e) {

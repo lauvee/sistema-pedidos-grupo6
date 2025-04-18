@@ -7,6 +7,8 @@ import com.grupo06.sistemapedidos.exception.RequestException;
 import com.grupo06.sistemapedidos.mapper.UserMapper;
 import com.grupo06.sistemapedidos.model.Usuario;
 import com.grupo06.sistemapedidos.repository.UserRepository;
+import com.grupo06.sistemapedidos.security.JwtAuthentication;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -38,7 +40,7 @@ public class UserService {
      * Método para registrar un nuevo usuario.
      *
      * Este método verifica si el usuario ya existe por su correo electrónico. Si no existe, guarda un nuevo usuario en la base de datos.
-     * Si el campo `totalSpend` está vacío, se asigna un valor predeterminado de 0.
+     * Si el campo `totalSpent` está vacío, se asigna un valor predeterminado de 0.
      * {@link Authentication} Se utiliza para verificar si el usuario que está creando un nuevo usuario es un administrador.
      * {@link JwtTokenService} Se utiliza para encriptar la contraseña del usuario antes de guardarla.
      * 
@@ -47,10 +49,12 @@ public class UserService {
      */
     public UsuarioDTO userRegistry(UsuarioDTO userDTO) {
         try {
+            // Crea la autenticación con nombre de usuario y roles
             // Obtenemos el contexto de Spring Security para verificar si el usuario que está creando un admin es también admin
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             boolean isAdmin = authentication.getAuthorities().stream()
-                        .anyMatch(a -> a.getAuthority().equals("ADMIN"));
+            .map(a -> a.getAuthority().toUpperCase())
+            .anyMatch(a -> a.contains("ADMIN"));
 
             // Si estamos creando un usuario admin y el usuario que lo crea no es admin, lanzamos una excepción
             if(userDTO.getRol() == RoleEnum.ADMIN && isAdmin)
@@ -100,7 +104,7 @@ public class UserService {
                         user.getName(),
                         user.getEmail(),
                         user.getSignUpDate(),
-                        user.getTotalSpend(),
+                        user.getTotalSpent(),
                         user.getRole().getName()
                     );
                     newUsuarioDTO.setToken(token); 
@@ -195,7 +199,7 @@ public class UserService {
                     user.getName(),
                     user.getEmail(),
                     user.getSignUpDate(),
-                    user.getTotalSpend(),
+                    user.getTotalSpent(),
                     user.getRole().getName()
                 );
                 usuarioDTO.setToken(token);

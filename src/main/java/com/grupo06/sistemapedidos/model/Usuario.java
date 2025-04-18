@@ -68,8 +68,8 @@ public class Usuario {
     private LocalDate signUpDate;
 
     @NotNull(message = "El total gastado no puede ser nulo")
-    @Column(name = "totalspend", nullable = false)
-    private Integer totalSpend = 0;
+    @Column(name = "totalSpent", nullable = false)
+    private Integer totalSpent = 0;
 
     @NotNull(message = "El rol no puede ser nulo")
     @ManyToOne

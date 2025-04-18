@@ -175,17 +175,29 @@ public class ProductService {
     }
 
     /**
-     * Elimina un producto por nombre
+     * Elimina todos los productos que coincidan con el nombre especificado
      * 
-     * @param name Nombre del producto a eliminar
+     * @param name Nombre de los productos a eliminar
+     * @return int Número de productos eliminados
      */
-    public void deleteByName(String name) {
+    public int deleteByName(String name) {
         try {
-            // Verificamos que el producto existe, si no existe lanzamos una excepción
-            Optional<Producto> newProducto = productRepository.findByName(name);
-            if(!newProducto.isPresent())
+            // Obtenemos todos los productos con ese nombre
+            List<Producto> productos = productRepository.findAllByName(name);
+            
+            // Verificamos que exista al menos un producto, si no existe lanzamos una excepción
+            if (productos.isEmpty())
                 throw new RequestException(ApiError.RECORD_NOT_FOUND);
-            productRepository.delete(newProducto.get());
+            
+                // Para cada producto, primero eliminamos sus referencias en pedido_producto
+            for (Producto producto : productos) 
+                productRepository.deletePedidoProductoByProductoId(producto.getId());
+        
+            // Eliminamos todos los productos encontrados
+            productRepository.deleteAll(productos);
+            
+            // Devolvemos la cantidad de productos eliminados
+            return productos.size();
         } catch (RequestException e) {
             throw e;
         } catch (Exception e) {

@@ -45,7 +45,6 @@ public class PedidoEvento {
     public String descripcion;
 
     @NotNull(message = "La fecha no puede ser nulo")
-    @NotEmpty(message = "La fecha no puede estar vacío")
     @Column(name = "fecha", nullable = false)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     public LocalDate date;

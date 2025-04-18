@@ -40,18 +40,18 @@ public class UsuarioDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate signUpDate;
     @Schema(description = "Total gastado por el usuario", example = "1000")
-    private Integer totalSpend;
+    private Integer totalSpent;
     @Schema(description = "Rol del usuario", example = "ADMIN")
     private RoleEnum rol;
     @Schema(hidden = true, nullable = true)
     private String token;
 
-    public UsuarioDTO(String name, String email, LocalDate signUpDate, Integer totalSpend, RoleEnum rol) {
+    public UsuarioDTO(String name, String email, LocalDate signUpDate, Integer totalSpent, RoleEnum rol) {
         this.name = name;
         this.email = email;
         this.signUpDate = signUpDate;
-        this.totalSpend = 0; // El gasto inicial es 0
-        this.totalSpend = totalSpend != null ? totalSpend : 0; // Si el gasto es nulo, se asigna 0
+        this.totalSpent = 0; // El gasto inicial es 0
+        this.totalSpent = totalSpent != null ? totalSpent : 0; // Si el gasto es nulo, se asigna 0
         this.rol = rol != null ? rol : RoleEnum.GUEST;  // Si el rol es nulo, se asigna el rol por defecto GUEST
     }
 }
